@@ -1,0 +1,21 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="192" y="192" width="640" height="640" rx="160" stroke="#1F4B36" stroke-width="48"/>
+
+  <!-- 12 months + 13th accent (Ethiopian calendar) -->
+  <circle cx="320" cy="360" r="20" fill="#1F4B36"/>
+  <circle cx="448" cy="360" r="20" fill="#1F4B36"/>
+  <circle cx="576" cy="360" r="20" fill="#1F4B36"/>
+  <circle cx="704" cy="360" r="20" fill="#1F4B36"/>
+
+  <circle cx="320" cy="456" r="20" fill="#1F4B36"/>
+  <circle cx="448" cy="456" r="20" fill="#1F4B36"/>
+  <circle cx="576" cy="456" r="20" fill="#1F4B36"/>
+  <circle cx="704" cy="456" r="20" fill="#1F4B36"/>
+
+  <circle cx="320" cy="552" r="20" fill="#1F4B36"/>
+  <circle cx="448" cy="552" r="20" fill="#1F4B36"/>
+  <circle cx="576" cy="552" r="20" fill="#1F4B36"/>
+  <circle cx="704" cy="552" r="20" fill="#1F4B36"/>
+
+  <circle cx="512" cy="664" r="22" fill="#B7C8A4"/>
+</svg>

@@ -1,0 +1,32 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="192" y="192" width="640" height="680" rx="80" fill="#FCFDF9" stroke="#E2E8DE" stroke-width="8"/>
+  <rect x="192" y="192" width="640" height="150" rx="80" fill="#B7C8A4"/>
+
+  <circle cx="340" cy="266" r="26" fill="#1F4B36"/>
+  <circle cx="684" cy="266" r="26" fill="#1F4B36"/>
+
+  <!-- 13 months grid (Ethiopian calendar) -->
+  <circle cx="320" cy="430" r="22" fill="#B7C8A4"/>
+  <circle cx="416" cy="430" r="22" fill="#B7C8A4"/>
+  <circle cx="512" cy="430" r="22" fill="#B7C8A4"/>
+  <circle cx="608" cy="430" r="22" fill="#B7C8A4"/>
+  <circle cx="704" cy="430" r="22" fill="#B7C8A4"/>
+
+  <circle cx="360" cy="520" r="22" fill="#B7C8A4"/>
+  <circle cx="448" cy="520" r="22" fill="#B7C8A4"/>
+  <circle cx="536" cy="520" r="22" fill="#B7C8A4"/>
+  <circle cx="624" cy="520" r="22" fill="#B7C8A4"/>
+
+  <circle cx="360" cy="610" r="22" fill="#B7C8A4"/>
+  <circle cx="448" cy="610" r="22" fill="#B7C8A4"/>
+  <circle cx="536" cy="610" r="22" fill="#B7C8A4"/>
+  <circle cx="624" cy="610" r="22" fill="#B7C8A4"/>
+
+  <!-- Reminder bell -->
+  <g transform="translate(580 610)">
+    <circle cx="100" cy="28" r="10" fill="#1F4B36"/>
+    <path d="M100 40C70 40 50 65 50 95V140H150V95C150 65 130 40 100 40Z" fill="#1F4B36"/>
+    <rect x="45" y="140" width="110" height="18" rx="9" fill="#1F4B36"/>
+    <circle cx="100" cy="164" r="12" fill="#B7C8A4"/>
+  </g>
+</svg>
