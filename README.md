@@ -1,29 +1,62 @@
-# Create T3 App
+# KenRemind Web
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+Marketing website for the KenRemind Ethiopian calendar reminder app.
 
-## What's next? How do I make an app with this?
+## Overview
+KenRemind Web is a single‑page marketing site with dedicated Privacy Policy and Terms & Conditions pages. It is built with the T3 stack (Next.js App Router, tRPC, Prisma, NextAuth), Tailwind CSS, and shadcn/ui components. The UI is tailored to match the KenRemind mobile app’s palette, typography, and visual tone.
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## Tech Stack
+- Next.js (App Router)
+- TypeScript
+- Tailwind CSS
+- shadcn/ui components
+- tRPC
+- Prisma (SQLite)
+- NextAuth
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Requirements
+- Node.js 20+
+- npm 10+
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+## Getting Started
+1. Install dependencies:
 
-## Learn More
+```bash
+npm install
+```
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+2. Run the dev server:
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+```bash
+npm run dev
+```
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+3. Open the site:
+- http://localhost:3000
 
-## How do I deploy this?
+## Scripts
+- `npm run dev` — start dev server
+- `npm run build` — production build
+- `npm run start` — run production server
+- `npm run lint` — lint
+- `npm run typecheck` — type check
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+## Project Structure
+- `src/app/page.tsx` — main landing page
+- `src/app/privacy/page.tsx` — privacy policy page
+- `src/app/terms/page.tsx` — terms & conditions page
+- `src/styles/globals.css` — theme tokens, fonts, animations
+- `src/components/ui/*` — shadcn UI primitives
+- `public/brand/*` — brand assets
+
+## Branding
+Primary logo is the Hugeicons “appointment-01” stroke‑rounded icon, color‑tinted via CSS to match KenRemind’s primary green. The favicon is generated from the same icon.
+
+## Content Sources
+Privacy Policy and Terms & Conditions copy are derived from the KenRemind mobile app localization strings.
+
+## Deployment
+This is a standard Next.js app and can be deployed to any provider that supports Node and Next.js (Vercel, Netlify, etc.).
+
+## Contact
+KenRemind support: kenremind@vptrading.et
