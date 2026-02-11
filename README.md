@@ -3,16 +3,13 @@
 Marketing website for the KenRemind Ethiopian calendar reminder app.
 
 ## Overview
-KenRemind Web is a single‑page marketing site with dedicated Privacy Policy and Terms & Conditions pages. It is built with the T3 stack (Next.js App Router, tRPC, Prisma, NextAuth), Tailwind CSS, and shadcn/ui components. The UI is tailored to match the KenRemind mobile app’s palette, typography, and visual tone.
+KenRemind Web is a single‑page marketing site with dedicated Privacy Policy and Terms & Conditions pages. It is built with Next.js (App Router), Tailwind CSS, and shadcn/ui components. The UI is tailored to match the KenRemind mobile app’s palette, typography, and visual tone.
 
 ## Tech Stack
 - Next.js (App Router)
 - TypeScript
 - Tailwind CSS
 - shadcn/ui components
-- tRPC
-- Prisma (SQLite)
-- NextAuth
 
 ## Requirements
 - Node.js 20+

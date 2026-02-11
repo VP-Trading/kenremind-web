@@ -3,7 +3,6 @@ import "~/styles/globals.css";
 import { type Metadata } from "next";
 import { Fraunces, Sora } from "next/font/google";
 
-import { TRPCReactProvider } from "~/trpc/react";
 
 const sora = Sora({
   subsets: ["latin"],
@@ -28,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${sora.variable} ${fraunces.variable}`}>
       <body className="min-h-screen bg-background text-foreground antialiased">
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        {children}
       </body>
     </html>
   );
