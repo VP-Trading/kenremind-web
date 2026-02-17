@@ -1,64 +1,98 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import {
   ArrowRight,
   BellRing,
   CalendarCheck,
   CalendarDays,
-  CalendarSync,
   CheckCircle2,
   CloudOff,
+  House,
   Languages,
+  Plus,
   Repeat2,
+  Settings2,
   ShieldCheck,
   Sparkles,
 } from "lucide-react";
 
+import { LanguageToggle } from "~/components/language-toggle";
+import { useLanguage, type Language } from "~/components/language-provider";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "~/components/ui/accordion";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 
+type Localized = {
+  en: string;
+  am: string;
+};
+
+const navItems = [
+  { label: { en: "Features", am: "ባህሪያት" }, href: "/#features" },
+  { label: { en: "Rules", am: "ደንቦች" }, href: "/#rules" },
+  { label: { en: "Privacy", am: "ግላዊነት" }, href: "/#privacy" },
+  { label: { en: "FAQ", am: "ጥያቄዎች" }, href: "/#faq" },
+];
+
 const featureCards = [
   {
-    title: "Ethiopian calendar scheduling",
-    description:
-      "Plan reminders by Ethiopian day, month, or year with rules built for how you already track time.",
+    title: {
+      en: "Ethiopian calendar scheduling",
+      am: "የኢትዮጵያ ቀን መቁጠሪያ መርሃ ግብር",
+    },
+    description: {
+      en: "Plan reminders by Ethiopian day, month, or year with rules built for how you already track time.",
+      am: "እርስዎ ቀን የሚቆጥሩበትን መንገድ በመከተል በኢትዮጵያ ቀን፣ ወር ወይም ዓመት ማሳሰቢያዎችን ያቅዱ።",
+    },
     icon: CalendarDays,
     tone: "bg-[#DDE9D8] text-[#1F4B36]",
   },
   {
-    title: "Flexible repeat rules",
-    description:
-      "Choose one-time, monthly, yearly, or every X days. KenRemind handles the next occurrence for you.",
+    title: { en: "Flexible repeat rules", am: "ተለዋዋጭ የመድገም ደንቦች" },
+    description: {
+      en: "Choose one-time, monthly, yearly, or every X days. KenRemind handles each next date automatically.",
+      am: "አንድ ጊዜ፣ ወርሃዊ፣ ዓመታዊ ወይም በየ X ቀናት ይምረጡ። KenRemind ቀጣዩን ቀን በራስ-ሰር ያስተናግዳል።",
+    },
     icon: Repeat2,
     tone: "bg-[#F5EBD2] text-[#1F4B36]",
   },
   {
-    title: "On-device notifications",
-    description:
-      "Stay ahead with local notifications that fire even when you are offline or away from the app.",
-    icon: BellRing,
-    tone: "bg-[#DCE8F6] text-[#1F4B36]",
-  },
-  {
-    title: "Private by design",
-    description:
-      "Your reminders stay on your phone with device-level encryption and zero cloud dependency.",
+    title: { en: "Private on-device storage", am: "በመሣሪያ ላይ የሚቀመጥ ግላዊ መረጃ" },
+    description: {
+      en: "Your reminder content stays on your phone. No cloud account or server sync is required.",
+      am: "የማሳሰቢያዎ ይዘት በስልክዎ ላይ ይቀመጣል። የደመና መለያ ወይም የሰርቨር ማመሳሰል አያስፈልግም።",
+    },
     icon: ShieldCheck,
     tone: "bg-[#F4E0E4] text-[#1F4B36]",
   },
   {
-    title: "Calendar sync ready",
-    description:
-      "Sync reminders to your device calendar so they show up alongside everything else you plan.",
+    title: { en: "Reliable local notifications", am: "አስተማማኝ አካባቢያዊ ማሳወቂያዎች" },
+    description: {
+      en: "Stay ahead with notifications that continue to work while offline and away from the app.",
+      am: "ከመተግበሪያው ውጭ ወይም ከኢንተርኔት ሲቋረጥም የሚሰሩ ማሳወቂያዎችን ያግኙ።",
+    },
+    icon: BellRing,
+    tone: "bg-[#DCE8F6] text-[#1F4B36]",
+  },
+  {
+    title: { en: "Calendar sync ready", am: "የቀን መቁጠሪያ ማመሳሰል ዝግጁ" },
+    description: {
+      en: "Push reminders to your device calendar so your full plan stays in one place.",
+      am: "ሁሉም እቅድዎ በአንድ ቦታ እንዲቆይ ማሳሰቢያዎችን ወደ መሣሪያ ቀን መቁጠሪያዎ ያስገቡ።",
+    },
     icon: CalendarCheck,
     tone: "bg-[#DDE9D8] text-[#1F4B36]",
   },
   {
-    title: "English + Amharic",
-    description:
-      "Switch between languages to plan with confidence in the wording you prefer.",
+    title: { en: "English + Amharic", am: "እንግሊዝኛ + አማርኛ" },
+    description: {
+      en: "Switch language instantly and manage reminders in the wording you prefer.",
+      am: "ቋንቋውን ወዲያውኑ ቀይሩ እና ማሳሰቢያዎችን በሚመችዎ ቃላት ያስተዳድሩ።",
+    },
     icon: Languages,
     tone: "bg-[#DCE8F6] text-[#1F4B36]",
   },
@@ -66,276 +100,365 @@ const featureCards = [
 
 const reminderRules = [
   {
-    title: "One-time dates",
-    description: "Perfect for events, paydays, and special moments.",
+    title: { en: "One-time dates", am: "አንድ ጊዜ ቀናት" },
+    description: {
+      en: "Perfect for events, paydays, and special moments.",
+      am: "ለዝግጅቶች፣ የደመወዝ ቀናት እና ልዩ ጊዜያት ተስማሚ ነው።",
+    },
     color: "bg-[#F5EBD2]",
     icon: CalendarCheck,
   },
   {
-    title: "Monthly Ethiopian",
-    description: "For recurring bills and obligations tied to Ethiopian months.",
+    title: { en: "Monthly Ethiopian", am: "ወርሃዊ ኢትዮጵያዊ" },
+    description: {
+      en: "For recurring bills and obligations tied to Ethiopian months.",
+      am: "ከኢትዮጵያ ወራት ጋር የተያያዙ የተደጋጋሚ ክፍያዎች እና ግዴታዎች ለማስተዳደር።",
+    },
     color: "bg-[#DDE9D8]",
     icon: CalendarDays,
   },
   {
-    title: "Yearly Ethiopian",
-    description: "Birthdays, holidays, and annual celebrations without guesswork.",
+    title: { en: "Yearly Ethiopian", am: "ዓመታዊ ኢትዮጵያዊ" },
+    description: {
+      en: "Birthdays, holidays, and annual celebrations without guesswork.",
+      am: "ልደቶችን፣ በዓላትን እና ዓመታዊ አከባበሮችን ያለ ግምት ያስታውሱ።",
+    },
     color: "bg-[#F4E0E4]",
     icon: CalendarCheck,
   },
   {
-    title: "Every X days",
-    description: "Custom intervals for meds, rituals, or spaced tasks.",
+    title: { en: "Every X days", am: "በየ X ቀናት" },
+    description: {
+      en: "Custom intervals for meds, rituals, or spaced tasks.",
+      am: "ለመድሀኒት፣ ልምዶች ወይም በክፍተት የሚደረጉ ስራዎች ብጁ ክፍተት።",
+    },
     color: "bg-[#DCE8F6]",
     icon: Repeat2,
   },
 ];
 
-const steps = [
+const faqs = [
   {
-    title: "Pick an Ethiopian date",
-    description: "Select a day from the Ethiopian calendar and set a time.",
+    question: {
+      en: "Does KenRemind store my reminder data in the cloud?",
+      am: "KenRemind የማሳሰቢያ መረጃዬን በደመና ላይ ያከማቻል?",
+    },
+    answer: {
+      en: "No. Reminder content stays on your device and is never uploaded to KenRemind servers.",
+      am: "አይደለም። የማሳሰቢያ ይዘት በመሣሪያዎ ላይ ብቻ ይቀመጣል እና ወደ KenRemind ሰርቨሮች አይላክም።",
+    },
   },
   {
-    title: "Choose the repeat rule",
-    description: "One-time, monthly, yearly, or custom spacing.",
+    question: {
+      en: "Can I use both Gregorian and Ethiopian dates?",
+      am: "የግሪጎሪያን እና የኢትዮጵያ ቀናትን በአንድ ላይ መጠቀም እችላለሁ?",
+    },
+    answer: {
+      en: "KenRemind is optimized for Ethiopian dates, with tools that keep you aligned with local calendar rhythm.",
+      am: "KenRemind በኢትዮጵያ ቀናት ላይ የተመቻቸ ሲሆን ከአካባቢያዊ የቀን መቁጠሪያ ሂደት ጋር እንዲመሳሰሉ ያግዛል።",
+    },
   },
   {
-    title: "Get reliable reminders",
-    description: "KenRemind notifies you and keeps everything in sync.",
+    question: {
+      en: "What happens if I change my phone?",
+      am: "ስልኬን ከቀየርሁ ምን ይሆናል?",
+    },
+    answer: {
+      en: "Because data is on-device, you can export or re-create reminders on your new phone when needed.",
+      am: "መረጃው በመሣሪያ ላይ ስለሚገኝ፣ ሲያስፈልግ በአዲሱ ስልክዎ ማሳሰቢያዎችን ማስመጣት ወይም እንደገና መፍጠር ይችላሉ።",
+    },
+  },
+  {
+    question: {
+      en: "Is it available in Amharic?",
+      am: "በአማርኛ ይገኛል?",
+    },
+    answer: {
+      en: "Yes. You can switch between English and Amharic anytime.",
+      am: "አዎ። በማንኛውም ጊዜ በእንግሊዝኛ እና በአማርኛ መካከል መቀየር ይችላሉ።",
+    },
   },
 ];
 
-const faqs = [
+const orbitChips = [
   {
-    question: "Does KenRemind store my reminder data in the cloud?",
-    answer:
-      "No. Reminder content stays on your device and is never uploaded to KenRemind servers.",
+    label: { en: "Home", am: "መነሻ" },
+    icon: House,
+    className: "-left-8 top-16 md:-left-14 lg:-left-20",
+    tone: "bg-[#DDE9D8] text-[#1F4B36]",
+    motionClass: "hero-chip-motion-a [animation-delay:0s]",
+    entryDelay: "0.28s",
   },
   {
-    question: "Can I use both Gregorian and Ethiopian dates?",
-    answer:
-      "KenRemind is optimized for Ethiopian dates, with tools that keep you aligned with the local calendar.",
+    label: { en: "Create", am: "ፍጠር" },
+    icon: Plus,
+    className: "right-4 top-10 md:-right-10 lg:-right-16",
+    tone: "bg-[#F4E0E4] text-[#1F4B36]",
+    motionClass: "hero-chip-motion-b [animation-delay:-1.1s]",
+    entryDelay: "0.36s",
   },
   {
-    question: "What happens if I change my phone?",
-    answer:
-      "Because data is on-device, you can export or re-create reminders as needed on your new phone.",
+    label: { en: "Calendar", am: "ቀን መቁጠሪያ" },
+    icon: CalendarDays,
+    className: "left-2 bottom-16 md:-left-8 lg:-left-12",
+    tone: "bg-[#DCE8F6] text-[#1F4B36]",
+    motionClass: "hero-chip-motion-c [animation-delay:-0.6s]",
+    entryDelay: "0.44s",
   },
   {
-    question: "Is it available in Amharic?",
-    answer: "Yes. You can switch between English and Amharic anytime.",
+    label: { en: "Settings", am: "ቅንብሮች" },
+    icon: Settings2,
+    className: "right-2 bottom-14 md:-right-6 lg:-right-12",
+    tone: "bg-[#F5EBD2] text-[#1F4B36]",
+    motionClass: "hero-chip-motion-a [animation-delay:-1.6s]",
+    entryDelay: "0.5s",
   },
 ];
+
+const heroScreens = {
+  home: "/brand/mocks/home-ios.png",
+  create: "/brand/mocks/create-reminder-ios.png",
+  calendar: "/brand/mocks/calendar-view-ios.png",
+  settings: "/brand/mocks/settings-ios.png",
+};
 
 const logoMask =
   "bg-primary [mask-image:url('/brand/appointment-01.webp')] [mask-size:contain] [mask-repeat:no-repeat] [mask-position:center] [-webkit-mask-image:url('/brand/appointment-01.webp')] [-webkit-mask-size:contain] [-webkit-mask-repeat:no-repeat] [-webkit-mask-position:center]";
 
+const tx = (value: Localized, language: Language) => value[language];
+
+type MotionState = "pre" | "in" | "out";
+
+function useSectionMotion(visibleRatio = 0.28) {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const [motion, setMotion] = useState<MotionState>("pre");
+
+  useEffect(() => {
+    const sectionEl = sectionRef.current;
+    if (!sectionEl) return;
+
+    if (typeof window === "undefined" || !("IntersectionObserver" in window)) {
+      setMotion("in");
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry) return;
+        const isVisible = entry.intersectionRatio >= visibleRatio;
+        setMotion((prev) => {
+          if (isVisible) return "in";
+          if (prev === "pre") return "pre";
+          return "out";
+        });
+      },
+      {
+        threshold: [0, 0.12, 0.24, 0.36, 0.52, 0.7],
+        rootMargin: "-10% 0px -12% 0px",
+      },
+    );
+
+    observer.observe(sectionEl);
+    return () => observer.disconnect();
+  }, [visibleRatio]);
+
+  return { ref: sectionRef, motion };
+}
+
 export default function Home() {
+  const { language } = useLanguage();
+  const featuresMotion = useSectionMotion(0.28);
+  const rulesMotion = useSectionMotion(0.24);
+  const privacyMotion = useSectionMotion(0.26);
+  const faqMotion = useSectionMotion(0.22);
+  const ctaMotion = useSectionMotion(0.22);
+
   return (
-    <main
-      id="top"
-      className="relative overflow-hidden bg-background pt-[var(--header-offset)]"
-    >
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-20 top-24 h-72 w-72 animate-[drift_14s_ease-in-out_infinite] rounded-full bg-[#B7C8A4]/40 blur-3xl" />
-        <div className="absolute right-0 top-0 h-96 w-96 animate-[drift_18s_ease-in-out_infinite] rounded-full bg-[#DCE8F6]/50 blur-[120px]" />
-        <div className="absolute bottom-[-120px] left-1/2 h-96 w-96 -translate-x-1/2 animate-[drift_16s_ease-in-out_infinite] rounded-full bg-[#F4E0E4]/40 blur-[140px]" />
+    <main className="relative overflow-x-clip bg-background pt-[calc(var(--header-offset)+0.25rem)]">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -left-32 top-24 h-[26rem] w-[26rem] animate-[drift_20s_ease-in-out_infinite] rounded-full bg-[#CFDCC7]/55 blur-[130px]" />
+        <div className="absolute right-[-8rem] top-[-4rem] h-[30rem] w-[30rem] animate-[drift_24s_ease-in-out_infinite] rounded-full bg-[#DCE8F6]/55 blur-[140px]" />
+        <div className="absolute bottom-[-16rem] left-1/2 h-[28rem] w-[28rem] -translate-x-1/2 animate-[drift_22s_ease-in-out_infinite] rounded-full bg-[#F4E0E4]/45 blur-[130px]" />
       </div>
 
-      <header className="fixed inset-x-0 top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur">
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-xl">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
-          <Link href="#top" className="flex items-center gap-3">
-            <span
-              aria-hidden
-              className={`block h-9 w-9 ${logoMask}`}
-            />
+          <Link href="/" className="flex items-center gap-3">
+            <span aria-hidden className={`block h-9 w-9 ${logoMask}`} />
             <span className="text-lg font-semibold tracking-tight">KenRemind</span>
           </Link>
-          <nav className="hidden items-center gap-6 text-sm font-semibold text-muted-foreground md:flex">
-            <Link className="transition hover:text-foreground" href="#features">
-              Features
-            </Link>
-            <Link className="transition hover:text-foreground" href="#rules">
-              Rules
-            </Link>
-            <Link className="transition hover:text-foreground" href="#privacy">
-              Privacy
-            </Link>
-            <Link className="transition hover:text-foreground" href="#faq">
-              FAQ
-            </Link>
+
+          <nav className="hidden items-center gap-7 text-sm font-semibold text-muted-foreground md:flex">
+            {navItems.map((item) => (
+              <Link key={item.href} className="transition hover:text-foreground" href={item.href}>
+                {tx(item.label, language)}
+              </Link>
+            ))}
           </nav>
-          <Button asChild size="sm" className="hidden md:inline-flex">
-            <Link href="#cta">Get the app</Link>
-          </Button>
+
+          <div className="flex items-center gap-3">
+            <Button asChild size="sm" className="hidden md:inline-flex">
+              <a href="mailto:kenremind@vptrading.et">
+                {language === "am" ? "አፕ ያግኙ" : "Get the app"}
+              </a>
+            </Button>
+            <LanguageToggle className="hidden sm:inline-flex" />
+          </div>
         </div>
       </header>
 
-      <section className="relative z-10 scroll-mt-[var(--header-offset)] pb-20 pt-16">
-        <div className="mx-auto grid w-full max-w-6xl items-center gap-12 px-6 lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="space-y-8">
+      <section className="relative z-10 pb-24 pt-10 sm:pt-14">
+        <div className="mx-auto w-full max-w-6xl px-6">
+          <div className="mx-auto max-w-3xl text-center">
             <Badge
-              variant="accent"
-              className="w-fit animate-[fade-in_0.8s_ease-out] [animation-fill-mode:both]"
+              variant="default"
+              className="mx-auto w-fit border-white/90 bg-white/90 text-foreground shadow-sm animate-[fade-in_0.8s_ease-out] [animation-fill-mode:both]"
             >
-              Built for Ethiopian dates
+              {language === "am" ? "ለኢትዮጵያ ቀናት የተሰራ" : "Built for Ethiopian dates"}
             </Badge>
-            <div className="space-y-6">
-              <h1 className="text-4xl font-semibold leading-tight text-foreground sm:text-5xl lg:text-6xl animate-[fade-up_0.9s_ease-out] [animation-fill-mode:both]">
-                Never miss a moment on the Ethiopian calendar.
-              </h1>
-              <p className="max-w-xl text-lg text-muted-foreground animate-[fade-up_0.9s_ease-out] [animation-delay:0.1s] [animation-fill-mode:both]">
-                KenRemind is a calm, focused reminder app made for Ethiopian timekeeping.
-                Plan one-time or recurring reminders, sync with your device calendar, and keep everything
-                private on your phone.
-              </p>
-            </div>
-            <div className="flex flex-wrap items-center gap-4 animate-[fade-up_0.9s_ease-out] [animation-delay:0.2s] [animation-fill-mode:both]">
+            <h1 className="mt-6 text-4xl font-semibold leading-tight text-foreground animate-[fade-up_0.95s_ease-out] [animation-fill-mode:both] sm:text-5xl lg:text-6xl">
+              {language === "am"
+                ? "በኢትዮጵያ የቀን መቁጠሪያ ላይ አንድም ጊዜ አትቀር።"
+                : "Never miss a moment on the Ethiopian calendar."}
+            </h1>
+            <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground animate-[fade-up_0.95s_ease-out] [animation-delay:0.12s] [animation-fill-mode:both]">
+              {language === "am"
+                ? "KenRemind ለኢትዮጵያ የጊዜ አቆጣጠር የተዘጋጀ የተረጋጋ የማሳሰቢያ መተግበሪያ ነው። አንድ ጊዜ ወይም ተደጋጋሚ ማሳሰቢያዎችን ያቅዱ፣ ከመሣሪያዎ የቀን መቁጠሪያ ጋር ያስማሙ፣ እና ሁሉንም መረጃ በስልክዎ ላይ ግላዊ ያድርጉ።"
+                : "KenRemind is a calm reminder app made for Ethiopian timekeeping. Plan one-time or recurring reminders, sync with your device calendar, and keep everything private on your phone."}
+            </p>
+            <div className="mt-9 flex flex-wrap items-center justify-center gap-4 animate-[fade-up_0.95s_ease-out] [animation-delay:0.2s] [animation-fill-mode:both]">
               <Button asChild size="lg">
-                <Link href="#cta" className="flex items-center gap-2">
-                  Get the app <ArrowRight className="h-4 w-4" />
-                </Link>
+                <a href="mailto:kenremind@vptrading.et" className="flex items-center gap-2">
+                  {language === "am" ? "አፕ ያግኙ" : "Get the app"} <ArrowRight className="h-4 w-4" />
+                </a>
               </Button>
               <Button asChild size="lg" variant="outline">
-                <Link href="#how">How it works</Link>
+                <Link href="/#features">
+                  {language === "am" ? "ባህሪያትን ይመልከቱ" : "Explore features"}
+                </Link>
               </Button>
-            </div>
-            <div className="flex flex-wrap gap-6 text-sm text-muted-foreground animate-[fade-up_0.9s_ease-out] [animation-delay:0.3s] [animation-fill-mode:both]">
-              <div className="flex items-center gap-2">
-                <CloudOff className="h-4 w-4" />
-                100% on-device
-              </div>
-              <div className="flex items-center gap-2">
-                <Languages className="h-4 w-4" />
-                English + Amharic
-              </div>
-              <div className="flex items-center gap-2">
-                <CalendarSync className="h-4 w-4" />
-                Calendar sync
-              </div>
             </div>
           </div>
 
-          <div className="relative">
-            <div className="absolute -left-8 -top-10 h-28 w-28 animate-[float_6s_ease-in-out_infinite] rounded-full bg-[#B7C8A4]/60 blur-2xl" />
-            <div className="absolute -bottom-12 right-6 h-36 w-36 animate-[float_7s_ease-in-out_infinite] rounded-full bg-[#F5EBD2]/70 blur-3xl" />
+          <div className="relative mx-auto mt-14 w-full max-w-5xl">
+            <div className="absolute left-1/2 top-[78%] h-24 w-10/12 -translate-x-1/2 rounded-full bg-black/30 blur-3xl animate-[shadow-breathe_6.5s_ease-in-out_infinite]" />
 
-            <div className="relative mx-auto w-full max-w-md">
-              <div className="rounded-[36px] border border-white/70 bg-white/70 p-4 shadow-[0_30px_80px_-40px_rgba(31,75,54,0.45)] backdrop-blur animate-[fade-scale_0.9s_ease-out] [animation-delay:0.15s] [animation-fill-mode:both]">
-                <div className="relative overflow-hidden rounded-[28px] bg-gradient-to-br from-white via-[#F9FBF6] to-[#DDE9D8] p-5">
-                  <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(183,200,164,0.22),rgba(220,232,246,0.18),rgba(244,224,228,0.2))] bg-[length:200%_200%] opacity-70 blur-2xl animate-[gradient-pan_12s_ease-in-out_infinite]" />
-                  <Image
-                    src="/brand/splash_bg_logo.png"
-                    alt="KenRemind preview"
-                    width={640}
-                    height={800}
-                    className="absolute inset-0 h-full w-full object-cover opacity-30"
-                  />
-                  <div className="relative space-y-5">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white shadow-sm animate-[pulse-glow_3.5s_ease-in-out_infinite]">
-                          <span aria-hidden className={`block h-6 w-6 ${logoMask}`} />
-                        </div>
-                        <div>
-                          <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                            Today
-                          </p>
-                          <p className="text-base font-semibold">Yekatit 3</p>
-                        </div>
-                      </div>
-                      <Badge variant="muted">09:15</Badge>
-                    </div>
-
-                    <div className="space-y-3">
-                      {[
-                        {
-                          title: "Rent due",
-                          meta: "Monthly · 5:00 PM",
-                        },
-                        {
-                          title: "Family check-in",
-                          meta: "Every 7 days · 7:30 AM",
-                        },
-                        {
-                          title: "Clinic reminder",
-                          meta: "One-time · 3:00 PM",
-                        },
-                      ].map((reminder, index) => (
-                        <div
-                          key={reminder.title}
-                          className="rounded-2xl bg-white/80 p-4 shadow-sm animate-[fade-up_0.7s_ease-out] [animation-fill-mode:both]"
-                          style={{ animationDelay: `${0.2 + index * 0.08}s` }}
-                        >
-                          <p className="text-sm font-semibold">{reminder.title}</p>
-                          <p className="text-xs text-muted-foreground">{reminder.meta}</p>
-                        </div>
-                      ))}
-                    </div>
+            {orbitChips.map((chip) => {
+              const Icon = chip.icon;
+              return (
+                <div
+                  key={chip.label.en}
+                  className={`absolute z-20 hidden md:flex ${chip.className} animate-[fade-up_0.7s_ease-out] [animation-fill-mode:both]`}
+                  style={{ animationDelay: chip.entryDelay }}
+                >
+                  <div
+                    className={`flex h-16 min-w-16 items-center justify-center gap-2 rounded-2xl border border-white/80 px-3.5 shadow-md backdrop-blur ${chip.tone} ${chip.motionClass}`}
+                  >
+                    <Icon className="h-[22px] w-[22px]" />
+                    <span className="hidden text-sm font-semibold text-foreground/90 xl:inline">
+                      {tx(chip.label, language)}
+                    </span>
                   </div>
                 </div>
+              );
+            })}
+
+            <div className="relative h-[32rem] sm:h-[37rem] md:h-[42rem] lg:h-[44rem]">
+              <div className="pointer-events-none absolute inset-x-[10%] top-[12%] h-[65%] animate-[drift_18s_ease-in-out_infinite] rounded-full bg-[radial-gradient(circle,rgba(226,232,246,0.65)_0%,rgba(226,232,246,0.06)_68%,transparent_100%)] blur-3xl" />
+              <div className="pointer-events-none absolute left-1/2 top-[78%] h-24 w-10/12 -translate-x-1/2 rounded-full bg-black/25 blur-3xl animate-[shadow-breathe_6.5s_ease-in-out_infinite]" />
+
+              <div className="absolute left-1/2 top-[8%] z-20 w-[185px] -translate-x-1/2 animate-[phone-main_10.5s_ease-in-out_infinite] sm:w-[220px] md:w-[252px] lg:w-[268px]">
+                <Image
+                  src={heroScreens.home}
+                  alt={language === "am" ? "የመነሻ ገጽ iOS ሞክ" : "KenRemind home iOS mock"}
+                  width={772}
+                  height={1600}
+                  className="h-auto w-full drop-shadow-[0_30px_40px_rgba(8,12,10,0.38)]"
+                  priority
+                />
               </div>
 
-              <Card className="absolute -left-12 bottom-10 hidden w-44 animate-[fade-up_0.8s_ease-out] border-white/70 bg-white/80 shadow-lg backdrop-blur lg:block">
-                <CardContent className="space-y-2 p-4">
-                  <p className="text-xs uppercase tracking-wide text-muted-foreground">This week</p>
-                  <p className="text-lg font-semibold">6 reminders</p>
-                  <p className="text-xs text-muted-foreground">
-                    All scheduled on Ethiopian dates.
-                  </p>
-                </CardContent>
-              </Card>
+              <div className="absolute left-[10%] top-[36%] z-10 hidden w-[132px] animate-[phone-tilt-left_11.2s_ease-in-out_infinite] sm:block md:w-[158px] lg:w-[172px]">
+                <Image
+                  src={heroScreens.create}
+                  alt={language === "am" ? "አዲስ ማሳሰቢያ ፍጠር iOS ሞክ" : "Create reminder iOS mock"}
+                  width={772}
+                  height={1600}
+                  className="h-auto w-full drop-shadow-[0_24px_30px_rgba(10,15,13,0.35)]"
+                />
+              </div>
 
-              <Card className="absolute -right-10 top-12 hidden w-40 animate-[fade-up_0.8s_ease-out] border-white/70 bg-white/80 shadow-lg backdrop-blur lg:block">
-                <CardContent className="space-y-2 p-4">
-                  <p className="text-xs uppercase tracking-wide text-muted-foreground">Secure</p>
-                  <p className="text-lg font-semibold">Encrypted</p>
-                  <p className="text-xs text-muted-foreground">
-                    Stored locally on-device.
-                  </p>
-                </CardContent>
-              </Card>
+              <div className="absolute right-[10%] top-[35%] z-10 hidden w-[132px] animate-[phone-tilt-right_12s_ease-in-out_infinite] sm:block md:w-[158px] lg:w-[172px]">
+                <Image
+                  src={heroScreens.calendar}
+                  alt={language === "am" ? "የቀን መቁጠሪያ እይታ iOS ሞክ" : "Calendar view iOS mock"}
+                  width={772}
+                  height={1600}
+                  className="h-auto w-full drop-shadow-[0_24px_30px_rgba(10,15,13,0.35)]"
+                />
+              </div>
+
+              <div className="pointer-events-none absolute left-1/2 top-[62%] z-30 w-[98px] -translate-x-[8%] animate-[phone-settings_13s_ease-in-out_infinite] sm:w-[116px] md:w-[130px] lg:w-[140px]">
+                <Image
+                  src={heroScreens.settings}
+                  alt={language === "am" ? "ቅንብሮች iOS ሞክ" : "Settings iOS mock"}
+                  width={772}
+                  height={1600}
+                  className="h-auto w-full drop-shadow-[0_26px_34px_rgba(10,15,13,0.35)]"
+                />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="features" className="relative z-10 scroll-mt-[var(--header-offset)] py-20">
+      <section
+        id="features"
+        ref={featuresMotion.ref}
+        data-motion={featuresMotion.motion}
+        className="features-motion relative z-10 scroll-mt-[calc(var(--header-offset)+1rem)] py-24"
+      >
         <div className="mx-auto w-full max-w-6xl px-6">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <div>
-              <Badge variant="muted" className="w-fit">
-                Features
-              </Badge>
-              <h2 className="mt-4 text-3xl font-semibold sm:text-4xl">
-                Everything you need to stay aligned.
-              </h2>
-            </div>
-            <p className="max-w-lg text-base text-muted-foreground">
-              KenRemind mirrors the Ethiopian calendar rhythm with clean views, reliable reminders, and
-              fast edits.
+          <div className="features-intro mx-auto max-w-2xl text-center">
+            <Badge variant="muted" className="mx-auto w-fit">
+              {language === "am" ? "ባህሪያት" : "Features"}
+            </Badge>
+            <h2 className="mt-5 text-3xl font-semibold sm:text-4xl">
+              {language === "am"
+                ? "ፕሪሚየም ስሜት፣ ተግባራዊ የማሳሰቢያ መሳሪያዎች።"
+                : "Premium feel, practical reminder tools."}
+            </h2>
+            <p className="mt-4 text-base text-muted-foreground">
+              {language === "am"
+                ? "KenRemind ቀላል እና የተጠናከረ ልምድ በመጠበቅ ብዙ ሰዎች የሚፈልጉትን የመርሃ ግብር ፍላጎቶች ይሸፍናል።"
+                : "KenRemind keeps the experience focused and lightweight while covering every schedule pattern most people need."}
             </p>
           </div>
 
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
-            {featureCards.map((feature) => {
+          <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {featureCards.map((feature, index) => {
               const Icon = feature.icon;
               return (
                 <Card
-                  key={feature.title}
-                  className="border-border/70 bg-white/70 transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_45px_-30px_rgba(31,75,54,0.55)]"
+                  key={feature.title.en}
+                  className="features-card border-border/70 bg-white/80 transition-shadow duration-300 hover:shadow-[0_24px_48px_-34px_rgba(18,32,24,0.6)]"
+                  style={
+                    {
+                      "--feature-enter-delay": `${120 + index * 90}ms`,
+                      "--feature-exit-delay": `${(featureCards.length - index - 1) * 45}ms`,
+                    } as CSSProperties
+                  }
                 >
                   <CardHeader className="flex flex-row items-start gap-4">
                     <div
-                      className={`flex h-12 w-12 items-center justify-center rounded-2xl ${feature.tone}`}
+                      className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${feature.tone}`}
                     >
-                      <Icon className="h-5 w-5" />
+                      <Icon className="h-[22px] w-[22px]" />
                     </div>
                     <div className="space-y-2">
-                      <CardTitle className="text-xl">{feature.title}</CardTitle>
+                      <CardTitle className="text-xl">{tx(feature.title, language)}</CardTitle>
                       <CardDescription className="text-sm text-muted-foreground">
-                        {feature.description}
+                        {tx(feature.description, language)}
                       </CardDescription>
                     </div>
                   </CardHeader>
@@ -346,220 +469,280 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="rules" className="relative z-10 scroll-mt-[var(--header-offset)] py-20">
-        <div className="mx-auto grid w-full max-w-6xl gap-12 px-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="space-y-6">
-            <Badge variant="muted" className="w-fit">
-              Reminder Rules
-            </Badge>
-            <h2 className="text-3xl font-semibold sm:text-4xl">
-              Built-in repeat patterns for every kind of reminder.
-            </h2>
-            <p className="text-base text-muted-foreground">
-              Set the cadence once and KenRemind calculates the next occurrence so you do not have to.
-            </p>
-            <div className="space-y-3 text-sm text-muted-foreground">
+      <section
+        id="rules"
+        ref={rulesMotion.ref}
+        data-motion={rulesMotion.motion}
+        className="rules-motion relative z-10 scroll-mt-[calc(var(--header-offset)+1rem)] py-24"
+      >
+        <div className="mx-auto grid w-full max-w-6xl items-start gap-12 px-6 lg:grid-cols-[1.02fr_0.98fr]">
+          <Card className="rules-panel border-border/70 bg-white/80 shadow-[0_18px_48px_-36px_rgba(21,34,26,0.58)]">
+            <CardHeader className="space-y-5">
+              <Badge variant="muted" className="w-fit">
+                {language === "am" ? "የማሳሰቢያ ደንቦች" : "Reminder Rules"}
+              </Badge>
+              <CardTitle className="text-3xl leading-tight sm:text-4xl">
+                {language === "am"
+                  ? "አንድ ጊዜ መድገሚያ ይምረጡ፣ KenRemind ቀሪውን ይተካል።"
+                  : "Pick a cadence once, KenRemind handles the rest."}
+              </CardTitle>
+              <CardDescription className="text-base text-muted-foreground">
+                {language === "am"
+                  ? "መተግበሪያው ከኢትዮጵያ ቀናት የሚመጡ የሚቀጥሉ ማሳሰቢያዎችን ያስላል እና ሳምንታዊ እይታውን ግልጽ ያደርጋል።"
+                  : "The app calculates upcoming reminders from Ethiopian dates and keeps the weekly view clean."}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3 pb-8 text-sm text-muted-foreground">
               {[
-                "Upcoming reminders dashboard",
-                "Weekly view grouped by Ethiopian date",
-                "Quick add for new reminders",
+                {
+                  en: "Upcoming reminders dashboard",
+                  am: "የሚመጡ ማሳሰቢያዎች ዳሽቦርድ",
+                },
+                {
+                  en: "Weekly grouping by Ethiopian date",
+                  am: "በኢትዮጵያ ቀን ሳምንታዊ ማቀናበር",
+                },
+                {
+                  en: "Quick add and edit flow",
+                  am: "ፈጣን መጨመር እና ማስተካከል",
+                },
               ].map((item) => (
-                <div key={item} className="flex items-center gap-2">
+                <div key={item.en} className="flex items-center gap-2">
                   <CheckCircle2 className="h-4 w-4 text-primary" />
-                  {item}
+                  {tx(item, language)}
                 </div>
               ))}
-            </div>
-          </div>
+            </CardContent>
+          </Card>
 
-          <div className="grid gap-4">
-            {reminderRules.map((rule) => {
+          <div className="rules-list grid gap-4">
+            {reminderRules.map((rule, index) => {
               const Icon = rule.icon;
               return (
-              <Card
-                key={rule.title}
-                className="border-border/70 bg-white/70 transition duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_-32px_rgba(31,75,54,0.5)]"
-              >
-                <CardContent className="flex items-start gap-4 p-5">
-                  <div
-                    className={`flex h-12 w-12 items-center justify-center rounded-2xl ${rule.color} text-primary`}
-                  >
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold">{rule.title}</h3>
-                    <p className="text-sm text-muted-foreground">{rule.description}</p>
-                  </div>
-                </CardContent>
-              </Card>
+                <Card
+                  key={rule.title.en}
+                  className="rules-item border-border/70 bg-white/80 transition-shadow duration-300 hover:shadow-[0_20px_40px_-32px_rgba(16,26,21,0.5)]"
+                  style={
+                    {
+                      "--rules-enter-delay": `${150 + index * 95}ms`,
+                      "--rules-exit-delay": `${(reminderRules.length - index - 1) * 55}ms`,
+                    } as CSSProperties
+                  }
+                >
+                  <CardContent className="flex items-start gap-4 p-5">
+                    <div
+                      className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${rule.color} text-primary`}
+                    >
+                      <Icon className="h-[22px] w-[22px]" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold">{tx(rule.title, language)}</h3>
+                      <p className="text-sm text-muted-foreground">{tx(rule.description, language)}</p>
+                    </div>
+                  </CardContent>
+                </Card>
               );
             })}
           </div>
         </div>
       </section>
 
-      <section id="how" className="relative z-10 scroll-mt-[var(--header-offset)] py-20">
-        <div className="mx-auto w-full max-w-6xl px-6">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <div>
-              <Badge variant="muted" className="w-fit">
-                How it works
-              </Badge>
-              <h2 className="mt-4 text-3xl font-semibold sm:text-4xl">
-                Three steps to calm, reliable reminders.
-              </h2>
-            </div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Sparkles className="h-4 w-4" />
-              Designed for focus
-            </div>
-          </div>
-
-          <div className="mt-10 grid gap-6 lg:grid-cols-3">
-            {steps.map((step, index) => (
-              <Card
-                key={step.title}
-                className="border-border/70 bg-white/70 transition duration-300 hover:-translate-y-1 hover:shadow-[0_16px_40px_-32px_rgba(31,75,54,0.5)]"
-              >
-                <CardHeader className="space-y-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#DDE9D8] text-lg font-semibold text-primary">
-                    0{index + 1}
-                  </div>
-                  <div className="space-y-2">
-                    <CardTitle>{step.title}</CardTitle>
-                    <CardDescription>{step.description}</CardDescription>
-                  </div>
-                </CardHeader>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="privacy" className="relative z-10 scroll-mt-[var(--header-offset)] py-20">
-        <div className="mx-auto grid w-full max-w-6xl items-center gap-12 px-6 lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="space-y-6">
+      <section
+        id="privacy"
+        ref={privacyMotion.ref}
+        data-motion={privacyMotion.motion}
+        className="privacy-motion relative z-10 scroll-mt-[calc(var(--header-offset)+1rem)] py-24"
+      >
+        <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-6 lg:grid-cols-[1fr_1fr]">
+          <div className="privacy-copy space-y-6">
             <Badge variant="muted" className="w-fit">
-              Privacy
+              {language === "am" ? "ግላዊነት" : "Privacy"}
             </Badge>
             <h2 className="text-3xl font-semibold sm:text-4xl">
-              Your reminders stay with you.
+              {language === "am" ? "ማሳሰቢያዎችዎ ከእርስዎ ጋር ይቆያሉ።" : "Your reminders stay with you."}
             </h2>
             <p className="text-base text-muted-foreground">
-              KenRemind stores everything on your phone. Reminder data is encrypted and never synced
-              to external servers.
+              {language === "am"
+                ? "KenRemind የማሳሰቢያ መረጃዎችን በመሣሪያዎ ላይ ያከማቻል። የማሳሰቢያ ይዘት ወደ ውጭ ሰርቨሮች አይላክም።"
+                : "KenRemind stores reminder data on-device. Reminder content is not uploaded to external servers."}
             </p>
             <div className="grid gap-4 sm:grid-cols-2">
               {[
                 {
-                  label: "No cloud accounts",
+                  label: { en: "No cloud account", am: "የደመና መለያ የለም" },
                   icon: CloudOff,
                 },
                 {
-                  label: "Encrypted on-device",
+                  label: { en: "Encrypted on-device", am: "በመሣሪያ ላይ የተመሰጠረ" },
                   icon: ShieldCheck,
                 },
                 {
-                  label: "Offline friendly",
+                  label: { en: "Offline friendly", am: "ከኢንተርኔት ውጭ የሚሰራ" },
                   icon: BellRing,
                 },
                 {
-                  label: "Sync to calendar",
+                  label: { en: "Calendar sync", am: "የቀን መቁጠሪያ ማመሳሰል" },
                   icon: CalendarCheck,
                 },
-              ].map((item) => {
+              ].map((item, index) => {
                 const Icon = item.icon;
                 return (
-                  <div key={item.label} className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#DDE9D8] text-primary">
+                  <div
+                    key={item.label.en}
+                    className="privacy-pill flex items-center gap-3 rounded-2xl border border-border/70 bg-white/70 p-3"
+                    style={
+                      {
+                        "--privacy-enter-delay": `${140 + index * 85}ms`,
+                        "--privacy-exit-delay": `${(4 - index) * 45}ms`,
+                      } as CSSProperties
+                    }
+                  >
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#DDE9D8] text-primary">
                       <Icon className="h-5 w-5" />
                     </div>
-                    <span className="text-sm font-semibold">{item.label}</span>
+                    <span className="text-sm font-semibold">{tx(item.label, language)}</span>
                   </div>
                 );
               })}
             </div>
           </div>
 
-          <Card className="border-border/70 bg-white/70">
+          <Card className="privacy-card border-border/70 bg-white/80">
             <CardHeader className="space-y-4">
-              <CardTitle className="text-2xl">Designed for clarity</CardTitle>
-              <CardDescription>
-                Calm colors, clean typography, and layouts inspired by the KenRemind mobile app.
+              <div className="flex items-center gap-2 text-sm font-semibold text-muted-foreground">
+                <Sparkles className="h-4 w-4 text-primary" />
+                {language === "am" ? "የዲዛይን አቅጣጫ" : "Design direction"}
+              </div>
+              <CardTitle className="text-2xl">
+                {language === "am"
+                  ? "ቀላል፣ ብሩህ እና በዓላማ የተዘጋጀ ልምድ።"
+                  : "Minimal, bright, and intentionally calm."}
+              </CardTitle>
+              <CardDescription className="text-base">
+                {language === "am"
+                  ? "ግልጽ ፊደላት፣ ለስላሳ ጥላ እና ትኩረትን የሚደግፍ እንቅስቃሴ።"
+                  : "Clean typography, soft depth, and motion that supports focus instead of distraction."}
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              {["Soft, low-distraction palette", "Bold Ethiopian date focus", "Fast reminder editing"].map(
-                (item) => (
-                  <div key={item} className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <CheckCircle2 className="h-4 w-4 text-primary" />
-                    {item}
-                  </div>
-                ),
-              )}
+            <CardContent className="space-y-3 text-sm text-muted-foreground">
+              {[
+                {
+                  en: "Light neutral base and layered shadows",
+                  am: "ቀላል መሠረታዊ ቀለም እና ተደራሽ ጥላዎች",
+                },
+                {
+                  en: "Subtle moving highlights for visual energy",
+                  am: "ለእይታ ኃይል ቀስ ብሎ የሚንቀሳቀስ አብራሪ ውጤት",
+                },
+                {
+                  en: "Deliberate spacing inspired by app UI",
+                  am: "ከመተግበሪያ UI የተነሳ የተወሰነ ክፍተት",
+                },
+              ].map((item) => (
+                <div key={item.en} className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-primary" />
+                  {tx(item, language)}
+                </div>
+              ))}
             </CardContent>
           </Card>
         </div>
       </section>
 
-      <section id="faq" className="relative z-10 scroll-mt-[var(--header-offset)] py-20">
+      <section
+        id="faq"
+        ref={faqMotion.ref}
+        data-motion={faqMotion.motion}
+        className="faq-motion relative z-10 scroll-mt-[calc(var(--header-offset)+1rem)] py-24"
+      >
         <div className="mx-auto w-full max-w-4xl px-6">
-          <div className="space-y-4 text-center">
+          <div className="faq-intro space-y-4 text-center">
             <Badge variant="muted" className="mx-auto w-fit">
-              FAQ
+              {language === "am" ? "ጥያቄዎች" : "FAQ"}
             </Badge>
-            <h2 className="text-3xl font-semibold sm:text-4xl">Questions, answered.</h2>
+            <h2 className="text-3xl font-semibold sm:text-4xl">
+              {language === "am" ? "ጥያቄዎች፣ በቀጥታ መልሶች።" : "Questions, answered."}
+            </h2>
             <p className="text-base text-muted-foreground">
-              Everything you need to know before you download.
+              {language === "am" ? "KenRemind ከመጫንዎ በፊት ፈጣን መረጃዎች።" : "Quick details before you install KenRemind."}
             </p>
           </div>
-          <Accordion type="single" collapsible className="mt-10 space-y-4">
-            {faqs.map((faq) => (
-              <AccordionItem key={faq.question} value={faq.question}>
-                <AccordionTrigger>{faq.question}</AccordionTrigger>
-                <AccordionContent>{faq.answer}</AccordionContent>
+          <Accordion type="single" collapsible className="faq-list mt-10 space-y-4">
+            {faqs.map((faq, index) => (
+              <AccordionItem
+                key={faq.question.en}
+                value={faq.question.en}
+                className="faq-item"
+                style={
+                  {
+                    "--faq-enter-delay": `${120 + index * 95}ms`,
+                    "--faq-exit-delay": `${(faqs.length - index - 1) * 50}ms`,
+                  } as CSSProperties
+                }
+              >
+                <AccordionTrigger>{tx(faq.question, language)}</AccordionTrigger>
+                <AccordionContent>{tx(faq.answer, language)}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
         </div>
       </section>
 
-      <section id="cta" className="relative z-10 scroll-mt-[var(--header-offset)] pb-24">
+      <section
+        id="cta"
+        ref={ctaMotion.ref}
+        data-motion={ctaMotion.motion}
+        className="cta-motion relative z-10 scroll-mt-[calc(var(--header-offset)+1rem)] pb-24"
+      >
         <div className="mx-auto w-full max-w-6xl px-6">
-          <Card className="border-border/70 bg-gradient-to-br from-white via-[#F9FBF6] to-[#DDE9D8]">
+          <Card className="cta-shell border-border/70 bg-gradient-to-br from-white via-[#F7F8F3] to-[#DDE9D8] shadow-[0_22px_48px_-32px_rgba(20,33,25,0.55)]">
             <CardContent className="grid gap-10 p-10 lg:grid-cols-[1.1fr_0.9fr]">
-              <div className="space-y-6">
+              <div className="cta-copy space-y-6">
                 <Badge variant="accent" className="w-fit">
-                  Ready when you are
+                  {language === "am" ? "ዝግጁ ሲሆኑ" : "Ready when you are"}
                 </Badge>
                 <h2 className="text-3xl font-semibold sm:text-4xl">
-                  Download KenRemind and plan with confidence.
+                  {language === "am"
+                    ? "KenRemind ያውርዱ እና በእርግጠኝነት ያቅዱ።"
+                    : "Download KenRemind and plan with confidence."}
                 </h2>
                 <p className="text-base text-muted-foreground">
-                  Available for iOS and Android. Stay on track with reminders made for Ethiopian dates
-                  and built for privacy.
+                  {language === "am"
+                    ? "ለ iOS እና Android ይገኛል። ለድጋፍ እና መረጃ በቀጥታ ኢሜይል ያድርጉልን።"
+                    : "Available for iOS and Android. For support and onboarding, email us directly."}
                 </p>
                 <div className="flex flex-wrap gap-4">
-                  <Button size="lg">Get the app</Button>
+                  <Button size="lg" asChild>
+                    <a href="mailto:kenremind@vptrading.et">
+                      {language === "am" ? "አፕ ያግኙ" : "Get the app"}
+                    </a>
+                  </Button>
                   <Button asChild variant="outline" size="lg">
-                    <a href="mailto:kenremind@vptrading.et">Contact support</a>
+                    <a href="mailto:kenremind@vptrading.et">
+                      {language === "am" ? "ድጋፍ ያግኙ" : "Contact support"}
+                    </a>
                   </Button>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  For privacy concerns, contact kenremind@vptrading.et.
+                  {language === "am" ? "መገናኛ: " : "Contact: "}kenremind@vptrading.et
                 </p>
               </div>
-              <div className="flex items-center justify-center">
-                <div className="flex items-center gap-4 rounded-3xl border border-white/80 bg-white/80 p-6 shadow-lg">
+
+              <div className="cta-peek flex items-center justify-center">
+                <div className="flex items-center gap-4 rounded-3xl border border-white/80 bg-white/85 p-6 shadow-lg">
                   <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1F4B36] text-white">
                     <BellRing className="h-6 w-6" />
                   </div>
                   <div>
                     <p className="text-sm uppercase tracking-wide text-muted-foreground">
-                      Next reminder
+                      {language === "am" ? "ቀጣይ ማሳሰቢያ" : "Next reminder"}
                     </p>
-                    <p className="text-lg font-semibold">Upcoming · 12:30 PM</p>
-                    <p className="text-xs text-muted-foreground">Monthly Ethiopian date</p>
+                    <p className="text-lg font-semibold">
+                      {language === "am" ? "ቀጣይ · 12:30 PM" : "Upcoming · 12:30 PM"}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {language === "am" ? "ወርሃዊ ኢትዮጵያ ቀን" : "Monthly Ethiopian date"}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -569,29 +752,27 @@ export default function Home() {
       </section>
 
       <footer className="relative z-10 border-t border-border/60 py-10">
-        <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-6 px-6 text-center md:flex-row md:text-left">
+        <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-3 px-6 text-center">
           <div className="flex items-center gap-3">
-            <span
-              aria-hidden
-              className={`block h-7 w-7 ${logoMask}`}
-            />
+            <span aria-hidden className={`block h-7 w-7 ${logoMask}`} />
             <span className="text-sm font-semibold">KenRemind</span>
           </div>
-          <div className="space-y-2 text-xs text-muted-foreground">
-            <p>
-              KenRemind keeps your reminders on your device. We do not upload reminder content to our
-              servers.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4 text-xs text-muted-foreground">
-              <Link className="transition hover:text-foreground" href="/privacy">
-                Privacy Policy
-              </Link>
-              <Link className="transition hover:text-foreground" href="/terms">
-                Terms & Conditions
-              </Link>
-            </div>
+          <p className="max-w-xl text-xs text-muted-foreground">
+            {language === "am"
+              ? "KenRemind ማሳሰቢያዎችዎን በመሣሪያዎ ላይ ያቆያል። የማሳሰቢያ ይዘትን ወደ ሰርቨሮቻችን አንላክም።"
+              : "KenRemind keeps your reminders on your device. We do not upload reminder content to our servers."}
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-5 text-xs text-muted-foreground">
+            <Link className="transition hover:text-foreground" href="/privacy">
+              {language === "am" ? "የግላዊነት ፖሊሲ" : "Privacy Policy"}
+            </Link>
+            <Link className="transition hover:text-foreground" href="/terms">
+              {language === "am" ? "ውሎች እና ሁኔታዎች" : "Terms & Conditions"}
+            </Link>
           </div>
-          <p className="text-xs text-muted-foreground">KenRemind · Built for Ethiopian dates</p>
+          <p className="text-xs text-muted-foreground">
+            {language === "am" ? "KenRemind · ለኢትዮጵያ ቀናት የተሰራ" : "KenRemind · Built for Ethiopian dates"}
+          </p>
         </div>
       </footer>
     </main>

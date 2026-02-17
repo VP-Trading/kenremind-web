@@ -1,35 +1,61 @@
+"use client";
+
 import Link from "next/link";
 
+import { LanguageToggle } from "~/components/language-toggle";
+import { useLanguage } from "~/components/language-provider";
 import { Badge } from "~/components/ui/badge";
 import { Card, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
+
+type Localized = {
+  en: string;
+  am: string;
+};
 
 const logoMask =
   "bg-primary [mask-image:url('/brand/appointment-01.webp')] [mask-size:contain] [mask-repeat:no-repeat] [mask-position:center] [-webkit-mask-image:url('/brand/appointment-01.webp')] [-webkit-mask-size:contain] [-webkit-mask-repeat:no-repeat] [-webkit-mask-position:center]";
 
-const sections = [
+const sections: Array<{ title: Localized; body: Localized }> = [
   {
-    title: "1. Use of the App",
-    body: "KenRemind provides reminder scheduling based on Ethiopian dates. Use the app at your own discretion.",
+    title: { en: "1. Use of the App", am: "1. መተግበሪያው አጠቃቀም" },
+    body: {
+      en: "KenRemind provides reminder scheduling based on Ethiopian dates. Use the app at your own discretion.",
+      am: "KenRemind በኢትዮጵያ ቀናት ላይ የተመሰረተ የማሳሰቢያ መርሃ ግብር ይሰጣል። መተግበሪያውን በራስዎ ፍላጎት ይጠቀሙ።",
+    },
   },
   {
-    title: "2. No Warranty",
-    body: "We provide the app as-is without warranty. We are not responsible for missed reminders or damages.",
+    title: { en: "2. No Warranty", am: "2. ዋስትና የለም" },
+    body: {
+      en: "We provide the app as-is without warranty. We are not responsible for missed reminders or damages.",
+      am: "መተግበሪያውን ያለ ዋስትና እንዳለ እንሰጣለን። የጠፉ ማሳሰቢያዎች ወይም ጉዳቶች ላይ ኃላፊነት አንወስድም።",
+    },
   },
   {
-    title: "3. Data Responsibility",
-    body: "You are responsible for the accuracy of reminder data you enter.",
+    title: { en: "3. Data Responsibility", am: "3. የውሂብ ኃላፊነት" },
+    body: {
+      en: "You are responsible for the accuracy of reminder data you enter.",
+      am: "ያስገቡት የማሳሰቢያ ውሂብ ትክክለኛነት ኃላፊነት በእርስዎ ላይ ነው።",
+    },
   },
   {
-    title: "4. Updates",
-    body: "We may update the app and these terms over time. Continued use means you accept changes.",
+    title: { en: "4. Updates", am: "4. ማሻሻያዎች" },
+    body: {
+      en: "We may update the app and these terms over time. Continued use means you accept changes.",
+      am: "መተግበሪያውን እና እነዚህን ውሎች በጊዜ ሂደት ልናዘምን እንችላለን። መቀጠል ማለት ለውጦቹን ተቀብለዋል ማለት ነው።",
+    },
   },
   {
-    title: "5. Contact",
-    body: "Questions? Contact kenremind@vptrading.et.",
+    title: { en: "5. Contact", am: "5. መገናኛ" },
+    body: {
+      en: "Questions? Contact kenremind@vptrading.et.",
+      am: "ጥያቄ አለ? በ kenremind@vptrading.et ያግኙን።",
+    },
   },
 ];
 
 export default function TermsPage() {
+  const { language } = useLanguage();
+
   return (
     <main id="top" className="relative overflow-hidden bg-background pt-[var(--header-offset)]">
       <div className="pointer-events-none absolute inset-0">
@@ -43,35 +69,44 @@ export default function TermsPage() {
             <span aria-hidden className={`block h-9 w-9 ${logoMask}`} />
             <span className="text-lg font-semibold tracking-tight">KenRemind</span>
           </Link>
-          <nav className="hidden items-center gap-6 text-sm font-semibold text-muted-foreground md:flex">
-            <Link className="transition hover:text-foreground" href="/">
-              Home
-            </Link>
-            <Link className="transition hover:text-foreground" href="/privacy">
-              Privacy
-            </Link>
-            <Link className="text-foreground" href="/terms">
-              Terms
-            </Link>
-          </nav>
+          <div className="flex items-center gap-3">
+            <nav className="hidden items-center gap-6 text-sm font-semibold text-muted-foreground md:flex">
+              <Link className="transition hover:text-foreground" href="/">
+                {language === "am" ? "መነሻ" : "Home"}
+              </Link>
+              <Link className="transition hover:text-foreground" href="/privacy">
+                {language === "am" ? "ግላዊነት" : "Privacy"}
+              </Link>
+              <Link className="text-foreground" href="/terms">
+                {language === "am" ? "ውሎች" : "Terms"}
+              </Link>
+            </nav>
+            <LanguageToggle className="hidden sm:inline-flex" />
+          </div>
         </div>
       </header>
 
       <section className="relative z-10 pb-20 pt-12">
         <div className="mx-auto w-full max-w-4xl px-6">
           <Badge variant="muted" className="w-fit">
-            Terms & Conditions
+            {language === "am" ? "ውሎች እና ሁኔታዎች" : "Terms & Conditions"}
           </Badge>
-          <h1 className="mt-4 text-3xl font-semibold sm:text-4xl">Terms & Conditions</h1>
-          <p className="mt-3 text-base text-muted-foreground">Read the terms for using KenRemind.</p>
+          <h1 className="mt-4 text-3xl font-semibold sm:text-4xl">
+            {language === "am" ? "ውሎች እና ሁኔታዎች" : "Terms & Conditions"}
+          </h1>
+          <p className="mt-3 text-base text-muted-foreground">
+            {language === "am" ? "KenRemind ለመጠቀም የሚመሩ ውሎችን ያንብቡ።" : "Read the terms for using KenRemind."}
+          </p>
 
           <div className="mt-8 space-y-4">
             {sections.map((section) => (
-              <Card key={section.title} className="border-border/70 bg-white/70">
+              <Card key={section.title.en} className="border-border/70 bg-white/70">
                 <CardHeader className="space-y-2">
-                  <CardTitle className="text-lg">{section.title}</CardTitle>
+                  <CardTitle className="text-lg">
+                    {language === "am" ? section.title.am : section.title.en}
+                  </CardTitle>
                   <CardDescription className="text-sm text-muted-foreground">
-                    {section.body}
+                    {language === "am" ? section.body.am : section.body.en}
                   </CardDescription>
                 </CardHeader>
               </Card>
@@ -88,19 +123,22 @@ export default function TermsPage() {
           </div>
           <div className="space-y-2 text-xs text-muted-foreground">
             <p>
-              KenRemind keeps your reminders on your device. We do not upload reminder content to our
-              servers.
+              {language === "am"
+                ? "KenRemind ማሳሰቢያዎችዎን በመሣሪያዎ ላይ ያቆያል። የማሳሰቢያ ይዘትን ወደ ሰርቨሮቻችን አንላክም።"
+                : "KenRemind keeps your reminders on your device. We do not upload reminder content to our servers."}
             </p>
             <div className="flex flex-wrap justify-center gap-4 text-xs text-muted-foreground">
               <Link className="transition hover:text-foreground" href="/privacy">
-                Privacy Policy
+                {language === "am" ? "የግላዊነት ፖሊሲ" : "Privacy Policy"}
               </Link>
               <Link className="transition hover:text-foreground" href="/terms">
-                Terms & Conditions
+                {language === "am" ? "ውሎች እና ሁኔታዎች" : "Terms & Conditions"}
               </Link>
             </div>
           </div>
-          <p className="text-xs text-muted-foreground">KenRemind · Built for Ethiopian dates</p>
+          <p className="text-xs text-muted-foreground">
+            {language === "am" ? "KenRemind · ለኢትዮጵያ ቀናት የተሰራ" : "KenRemind · Built for Ethiopian dates"}
+          </p>
         </div>
       </footer>
     </main>
