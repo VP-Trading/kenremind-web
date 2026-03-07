@@ -228,6 +228,27 @@ const logoMask =
 const tx = (value: Localized, language: Language) => value[language];
 
 type MotionState = "pre" | "in" | "out";
+type DevicePlatform = "ios" | "android" | "desktop";
+
+const APP_STORE_URL = "https://apps.apple.com/us/app/kenremind-ethiopian-reminder/id6758899285";
+
+function detectStorePlatform(): DevicePlatform {
+  if (typeof window === "undefined") {
+    return "desktop";
+  }
+
+  const userAgent = window.navigator.userAgent;
+  const platform = window.navigator.platform;
+  const maxTouchPoints = window.navigator.maxTouchPoints ?? 0;
+  const isAndroid = /Android/i.test(userAgent);
+  const isIOS =
+    /iPhone|iPad|iPod/i.test(userAgent) ||
+    (platform === "MacIntel" && maxTouchPoints > 1);
+
+  if (isIOS) return "ios";
+  if (isAndroid) return "android";
+  return "desktop";
+}
 
 function useSectionMotion(visibleRatio = 0.28) {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -272,6 +293,20 @@ export default function Home() {
   const privacyMotion = useSectionMotion(0.26);
   const faqMotion = useSectionMotion(0.22);
   const ctaMotion = useSectionMotion(0.22);
+  const getAppLabel = language === "am" ? "አፕ ያግኙ" : "Get the app";
+
+  const handleGetAppClick = () => {
+    const platform = detectStorePlatform();
+
+    if (platform === "ios") {
+      window.location.assign(APP_STORE_URL);
+      return;
+    }
+
+    if (platform === "desktop") {
+      window.open(APP_STORE_URL, "_blank", "noopener,noreferrer");
+    }
+  };
 
   return (
     <main className="relative overflow-x-clip bg-background pt-[calc(var(--header-offset)+0.25rem)]">
@@ -297,10 +332,13 @@ export default function Home() {
           </nav>
 
           <div className="flex items-center gap-3">
-            <Button asChild size="sm" className="hidden md:inline-flex">
-              <a href="mailto:kenremind@vptrading.et">
-                {language === "am" ? "አፕ ያግኙ" : "Get the app"}
-              </a>
+            <Button
+              size="sm"
+              type="button"
+              onClick={handleGetAppClick}
+              className="hidden md:inline-flex"
+            >
+              {getAppLabel}
             </Button>
             <LanguageToggle className="hidden sm:inline-flex" />
           </div>
@@ -327,10 +365,10 @@ export default function Home() {
                 : "KenRemind is a calm reminder app made for Ethiopian timekeeping. Plan one-time or recurring reminders, sync with your device calendar, and keep everything private on your phone."}
             </p>
             <div className="mt-9 flex flex-wrap items-center justify-center gap-4 animate-[fade-up_0.95s_ease-out] [animation-delay:0.2s] [animation-fill-mode:both]">
-              <Button asChild size="lg">
-                <a href="mailto:kenremind@vptrading.et" className="flex items-center gap-2">
-                  {language === "am" ? "አፕ ያግኙ" : "Get the app"} <ArrowRight className="h-4 w-4" />
-                </a>
+              <Button size="lg" type="button" onClick={handleGetAppClick}>
+                <span className="flex items-center gap-2">
+                  {getAppLabel} <ArrowRight className="h-4 w-4" />
+                </span>
               </Button>
               <Button asChild size="lg" variant="outline">
                 <Link href="/#features">
@@ -708,14 +746,12 @@ export default function Home() {
                 </h2>
                 <p className="text-base text-muted-foreground">
                   {language === "am"
-                    ? "ለ iOS እና Android ይገኛል። ለድጋፍ እና መረጃ በቀጥታ ኢሜይል ያድርጉልን።"
-                    : "Available for iOS and Android. For support and onboarding, email us directly."}
+                    ? "አሁን በ Apple App Store ይገኛል። የ Android ማውረጃ አገናኝ በቅርቡ ይመጣል። ለድጋፍ እና መረጃ በቀጥታ ኢሜይል ያድርጉልን።"
+                    : "Available now on the Apple App Store. The Android download link is coming soon. For support and onboarding, email us directly."}
                 </p>
                 <div className="flex flex-wrap gap-4">
-                  <Button size="lg" asChild>
-                    <a href="mailto:kenremind@vptrading.et">
-                      {language === "am" ? "አፕ ያግኙ" : "Get the app"}
-                    </a>
+                  <Button size="lg" type="button" onClick={handleGetAppClick}>
+                    {getAppLabel}
                   </Button>
                   <Button asChild variant="outline" size="lg">
                     <a href="mailto:kenremind@vptrading.et">
