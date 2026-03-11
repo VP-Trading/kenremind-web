@@ -17,7 +17,7 @@ const logoMask =
 
 const sections: Array<{ title: Localized; body: Localized }> = [
   {
-    title: { en: "1. Use of the App", am: "1. መተግበሪያው አጠቃቀም" },
+    title: { en: "1. Use of the App", am: "1. የመተግበሪያው አጠቃቀም" },
     body: {
       en: "KenRemind provides reminder scheduling based on Ethiopian dates. Use the app at your own discretion.",
       am: "KenRemind በኢትዮጵያ ቀናት ላይ የተመሰረተ የማሳሰቢያ መርሃ ግብር ይሰጣል። መተግበሪያውን በራስዎ ፍላጎት ይጠቀሙ።",
@@ -31,7 +31,7 @@ const sections: Array<{ title: Localized; body: Localized }> = [
     },
   },
   {
-    title: { en: "3. Data Responsibility", am: "3. የውሂብ ኃላፊነት" },
+    title: { en: "3. Data Responsibility", am: "3. የመረጃ ኃላፊነት" },
     body: {
       en: "You are responsible for the accuracy of reminder data you enter.",
       am: "ያስገቡት የማሳሰቢያ ውሂብ ትክክለኛነት ኃላፊነት በእርስዎ ላይ ነው።",
@@ -41,7 +41,7 @@ const sections: Array<{ title: Localized; body: Localized }> = [
     title: { en: "4. Updates", am: "4. ማሻሻያዎች" },
     body: {
       en: "We may update the app and these terms over time. Continued use means you accept changes.",
-      am: "መተግበሪያውን እና እነዚህን ውሎች በጊዜ ሂደት ልናዘምን እንችላለን። መቀጠል ማለት ለውጦቹን ተቀብለዋል ማለት ነው።",
+      am: "መተግበሪያውን እና እነዚህን ውሎች በጊዜ ሂደት ልናሻሽል እንችላለን። መቀጠል ማለት ለውጦቹን ተቀብለዋል ማለት ነው።",
     },
   },
   {

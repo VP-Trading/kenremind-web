@@ -17,14 +17,14 @@ const logoMask =
 
 const sections: Array<{ title: Localized; body: Localized }> = [
   {
-    title: { en: "1. What We Store", am: "1. የምናከማቸው" },
+    title: { en: "1. What We Store", am: "1. የመናስቀመጠው" },
     body: {
       en: "KenRemind keeps your reminders on your device. We do not upload reminder content to our servers.",
-      am: "KenRemind ማሳሰቢያዎችዎን በመሣሪያዎ ላይ ያቆያል። የማሳሰቢያ ይዘትን ወደ ሰርቨሮቻችን አንላክም።",
+      am: "KenRemind ማሳሰቢያዎችዎን በስልክዎ ላይ ያቆያል። የማሳሰቢያ ይዘትን ወደ ሰርቨሮቻችን አንልክም።",
     },
   },
   {
-    title: { en: "2. Data Security", am: "2. የውሂብ ደህንነት" },
+    title: { en: "2. Data Security", am: "2. የመረጃ ደህንነት" },
     body: {
       en: "On mobile, reminder data is encrypted on-device. The encryption key is stored in the device keychain/keystore.",
       am: "በሞባይል ላይ የማሳሰቢያ ውሂብ በመሣሪያው ላይ ይመሰጠራል። የምስጠራ ቁልፉ በመሣሪያው keychain/keystore ውስጥ ይቀመጣል።",

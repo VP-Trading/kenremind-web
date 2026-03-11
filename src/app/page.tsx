@@ -42,7 +42,7 @@ const featureCards = [
   {
     title: {
       en: "Ethiopian calendar scheduling",
-      am: "የኢትዮጵያ ቀን መቁጠሪያ መርሃ ግብር",
+      am: "በኢትዮጵያ ቀን መቁጠሪያ መርሃ ግብር መያዝ ",
     },
     description: {
       en: "Plan reminders by Ethiopian day, month, or year with rules built for how you already track time.",
@@ -61,16 +61,16 @@ const featureCards = [
     tone: "bg-[#F5EBD2] text-[#1F4B36]",
   },
   {
-    title: { en: "Private on-device storage", am: "በመሣሪያ ላይ የሚቀመጥ ግላዊ መረጃ" },
+    title: { en: "Private on-device storage", am: "በስልኮ ላይ የሚቀመጥ ግላዊ መረጃ" },
     description: {
       en: "Your reminder content stays on your phone. No cloud account or server sync is required.",
-      am: "የማሳሰቢያዎ ይዘት በስልክዎ ላይ ይቀመጣል። የደመና መለያ ወይም የሰርቨር ማመሳሰል አያስፈልግም።",
+      am: "የማሳሰቢያዎ ይዘት በስልክዎ ላይ በቻ ይቀመጣል። የሰርቨር ማመሳሰል አያስፈልግም።",
     },
     icon: ShieldCheck,
     tone: "bg-[#F4E0E4] text-[#1F4B36]",
   },
   {
-    title: { en: "Reliable local notifications", am: "አስተማማኝ አካባቢያዊ ማሳወቂያዎች" },
+    title: { en: "Reliable local notifications", am: "አስተማማኝ ማሳወቂያዎች" },
     description: {
       en: "Stay ahead with notifications that continue to work while offline and away from the app.",
       am: "ከመተግበሪያው ውጭ ወይም ከኢንተርኔት ሲቋረጥም የሚሰሩ ማሳወቂያዎችን ያግኙ።",
@@ -79,7 +79,7 @@ const featureCards = [
     tone: "bg-[#DCE8F6] text-[#1F4B36]",
   },
   {
-    title: { en: "Calendar sync ready", am: "የቀን መቁጠሪያ ማመሳሰል ዝግጁ" },
+    title: { en: "Calendar sync ready", am: "የቀን መቁጠሪያ ለማመሳሰል ዝግጁ" },
     description: {
       en: "Push reminders to your device calendar so your full plan stays in one place.",
       am: "ሁሉም እቅድዎ በአንድ ቦታ እንዲቆይ ማሳሰቢያዎችን ወደ መሣሪያ ቀን መቁጠሪያዎ ያስገቡ።",
@@ -100,7 +100,7 @@ const featureCards = [
 
 const reminderRules = [
   {
-    title: { en: "One-time dates", am: "አንድ ጊዜ ቀናት" },
+    title: { en: "One-time dates", am: "አንድ ጊዜ መረሃግብር" },
     description: {
       en: "Perfect for events, paydays, and special moments.",
       am: "ለዝግጅቶች፣ የደመወዝ ቀናት እና ልዩ ጊዜያት ተስማሚ ነው።",
@@ -130,7 +130,7 @@ const reminderRules = [
     title: { en: "Every X days", am: "በየ X ቀናት" },
     description: {
       en: "Custom intervals for meds, rituals, or spaced tasks.",
-      am: "ለመድሀኒት፣ ልምዶች ወይም በክፍተት የሚደረጉ ስራዎች ብጁ ክፍተት።",
+      am: "ለመድሀኒት፣ ልምዶች ወይም በቀናት በክፍተት የሚደረጉ ስራዎች ።",
     },
     color: "bg-[#DCE8F6]",
     icon: Repeat2,
@@ -141,11 +141,11 @@ const faqs = [
   {
     question: {
       en: "Does KenRemind store my reminder data in the cloud?",
-      am: "KenRemind የማሳሰቢያ መረጃዬን በደመና ላይ ያከማቻል?",
+      am: "KenRemind የማሳሰቢያ መረጃዬን ሰርቨር ላይ ያስቀመጣል?",
     },
     answer: {
       en: "No. Reminder content stays on your device and is never uploaded to KenRemind servers.",
-      am: "አይደለም። የማሳሰቢያ ይዘት በመሣሪያዎ ላይ ብቻ ይቀመጣል እና ወደ KenRemind ሰርቨሮች አይላክም።",
+      am: "አይደለም። የማሳሰቢያ ይዘት በስልክዎ ላይ ብቻ ይቀመጣል እና ወደ KenRemind ሰርቨሮች አይላክም።",
     },
   },
   {
@@ -161,11 +161,11 @@ const faqs = [
   {
     question: {
       en: "What happens if I change my phone?",
-      am: "ስልኬን ከቀየርሁ ምን ይሆናል?",
+      am: "ስልኬን ከቀየርኩ ምን ይሆናል?",
     },
     answer: {
       en: "Because data is on-device, you can export or re-create reminders on your new phone when needed.",
-      am: "መረጃው በመሣሪያ ላይ ስለሚገኝ፣ ሲያስፈልግ በአዲሱ ስልክዎ ማሳሰቢያዎችን ማስመጣት ወይም እንደገና መፍጠር ይችላሉ።",
+      am: "መረጃው ስልክዎ ላይ ስለሚገኝ፣ ሲያስፈልግ በአዲሱ ስልክዎ ማሳሰቢያዎችን ማስመጣት ወይም እንደገና መፍጠር ይችላሉ።",
     },
   },
   {
@@ -293,7 +293,7 @@ export default function Home() {
   const privacyMotion = useSectionMotion(0.26);
   const faqMotion = useSectionMotion(0.22);
   const ctaMotion = useSectionMotion(0.22);
-  const getAppLabel = language === "am" ? "አፕ ያግኙ" : "Get the app";
+  const getAppLabel = language === "am" ? "መተገበርያውን ያግኙ" : "Get the app";
 
   const handleGetAppClick = () => {
     const platform = detectStorePlatform();
@@ -356,12 +356,12 @@ export default function Home() {
             </Badge>
             <h1 className="mt-6 text-4xl font-semibold leading-tight text-foreground animate-[fade-up_0.95s_ease-out] [animation-fill-mode:both] sm:text-5xl lg:text-6xl">
               {language === "am"
-                ? "በኢትዮጵያ የቀን መቁጠሪያ ላይ አንድም ጊዜ አትቀር።"
+                ? "በኢትዮጵያ የቀን መቁጠሪያ ላይ አንድም አፍታ አንዳያልፎት።"
                 : "Never miss a moment on the Ethiopian calendar."}
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground animate-[fade-up_0.95s_ease-out] [animation-delay:0.12s] [animation-fill-mode:both]">
               {language === "am"
-                ? "KenRemind ለኢትዮጵያ የጊዜ አቆጣጠር የተዘጋጀ የተረጋጋ የማሳሰቢያ መተግበሪያ ነው። አንድ ጊዜ ወይም ተደጋጋሚ ማሳሰቢያዎችን ያቅዱ፣ ከመሣሪያዎ የቀን መቁጠሪያ ጋር ያስማሙ፣ እና ሁሉንም መረጃ በስልክዎ ላይ ግላዊ ያድርጉ።"
+                ? "KenRemind ለኢትዮጵያ የጊዜ አቆጣጠር የተዘጋጀ መተግበሪያ ነው። አንድ ጊዜ ወይም ተደጋጋሚ ማሳሰቢያዎችን ያቅዱ፣ ከስልኮ የቀን መቁጠሪያ ጋር ያስማሙ፣ እና ሁሉንም መረጃ በስልክዎ ላይ ግላዊ ያድርጉ።"
                 : "KenRemind is a calm reminder app made for Ethiopian timekeeping. Plan one-time or recurring reminders, sync with your device calendar, and keep everything private on your phone."}
             </p>
             <div className="mt-9 flex flex-wrap items-center justify-center gap-4 animate-[fade-up_0.95s_ease-out] [animation-delay:0.2s] [animation-fill-mode:both]">
@@ -795,7 +795,7 @@ export default function Home() {
           </div>
           <p className="max-w-xl text-xs text-muted-foreground">
             {language === "am"
-              ? "KenRemind ማሳሰቢያዎችዎን በመሣሪያዎ ላይ ያቆያል። የማሳሰቢያ ይዘትን ወደ ሰርቨሮቻችን አንላክም።"
+              ? "KenRemind ማሳሰቢያዎችዎን በስልክዎ ላይ ያቆያል። የማሳሰቢያ ይዘትን ወደ ሰርቨሮቻችን አንላክም።"
               : "KenRemind keeps your reminders on your device. We do not upload reminder content to our servers."}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-5 text-xs text-muted-foreground">
