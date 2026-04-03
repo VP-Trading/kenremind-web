@@ -17,6 +17,7 @@ import {
   Settings2,
   ShieldCheck,
   Sparkles,
+  X,
 } from "lucide-react";
 
 import { LanguageToggle } from "~/components/language-toggle";
@@ -231,6 +232,7 @@ type MotionState = "pre" | "in" | "out";
 type DevicePlatform = "ios" | "android" | "desktop";
 
 const APP_STORE_URL = "https://apps.apple.com/us/app/kenremind-ethiopian-reminder/id6758899285";
+const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.vp.kenremind&pli=1";
 
 function detectStorePlatform(): DevicePlatform {
   if (typeof window === "undefined") {
@@ -293,7 +295,35 @@ export default function Home() {
   const privacyMotion = useSectionMotion(0.26);
   const faqMotion = useSectionMotion(0.22);
   const ctaMotion = useSectionMotion(0.22);
+  const [isStoreChooserOpen, setStoreChooserOpen] = useState(false);
   const getAppLabel = language === "am" ? "አፕ ያግኙ" : "Get the app";
+
+  useEffect(() => {
+    if (!isStoreChooserOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setStoreChooserOpen(false);
+      }
+    };
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isStoreChooserOpen]);
+
+  const openDesktopStore = (url: string) => {
+    const popup = window.open(url, "_blank", "noopener,noreferrer");
+    if (!popup) {
+      window.location.assign(url);
+    }
+    setStoreChooserOpen(false);
+  };
 
   const handleGetAppClick = () => {
     const platform = detectStorePlatform();
@@ -303,8 +333,13 @@ export default function Home() {
       return;
     }
 
+    if (platform === "android") {
+      window.location.assign(PLAY_STORE_URL);
+      return;
+    }
+
     if (platform === "desktop") {
-      window.open(APP_STORE_URL, "_blank", "noopener,noreferrer");
+      setStoreChooserOpen(true);
     }
   };
 
@@ -746,8 +781,8 @@ export default function Home() {
                 </h2>
                 <p className="text-base text-muted-foreground">
                   {language === "am"
-                    ? "አሁን በ Apple App Store ይገኛል። የ Android ማውረጃ አገናኝ በቅርቡ ይመጣል። ለድጋፍ እና መረጃ በቀጥታ ኢሜይል ያድርጉልን።"
-                    : "Available now on the Apple App Store. The Android download link is coming soon. For support and onboarding, email us directly."}
+                    ? "አሁን በ Apple App Store እና Google Play ይገኛል። ለድጋፍ እና መረጃ በቀጥታ ኢሜይል ያድርጉልን።"
+                    : "Available now on the Apple App Store and Google Play. For support and onboarding, email us directly."}
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <Button size="lg" type="button" onClick={handleGetAppClick}>
@@ -811,6 +846,68 @@ export default function Home() {
           </p>
         </div>
       </footer>
+
+      {isStoreChooserOpen ? (
+        <div
+          className="fixed inset-0 z-[80] flex items-center justify-center bg-foreground/15 px-6 backdrop-blur-sm"
+          onClick={() => setStoreChooserOpen(false)}
+        >
+          <Card
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="store-chooser-title"
+            className="w-full max-w-md border-white/80 bg-white/95 shadow-[0_28px_80px_-30px_rgba(17,24,20,0.45)]"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <CardHeader className="space-y-4">
+              <div className="flex items-start justify-between gap-4">
+                <div className="space-y-2">
+                  <Badge variant="muted" className="w-fit">
+                    {language === "am" ? "መደብር ይምረጡ" : "Choose a store"}
+                  </Badge>
+                  <CardTitle id="store-chooser-title" className="text-2xl">
+                    {language === "am" ? "KenRemind የሚወርድበትን መደብር ይምረጡ።" : "Pick where to download KenRemind."}
+                  </CardTitle>
+                  <CardDescription className="text-sm text-muted-foreground">
+                    {language === "am"
+                      ? "በዴስክቶፕ ላይ ስለሆኑ ለመሣሪያዎ የሚመች መደብር ይምረጡ።"
+                      : "You’re on desktop, so choose the store that matches your device."}
+                  </CardDescription>
+                </div>
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="ghost"
+                  className="shrink-0"
+                  onClick={() => setStoreChooserOpen(false)}
+                  aria-label={language === "am" ? "ዝጋ" : "Close"}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <Button
+                type="button"
+                className="w-full justify-between"
+                onClick={() => openDesktopStore(APP_STORE_URL)}
+              >
+                <span>Apple App Store</span>
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full justify-between"
+                onClick={() => openDesktopStore(PLAY_STORE_URL)}
+              >
+                <span>Google Play</span>
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      ) : null}
     </main>
   );
 }
