@@ -789,13 +789,13 @@ export default function Home() {
                     {getAppLabel}
                   </Button>
                   <Button asChild variant="outline" size="lg">
-                    <a href="mailto:kenremind@vptrading.et">
+                    <a href="mailto:info@kenremind.app">
                       {language === "am" ? "ድጋፍ ያግኙ" : "Contact support"}
                     </a>
                   </Button>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  {language === "am" ? "መገናኛ: " : "Contact: "}kenremind@vptrading.et
+                  {language === "am" ? "መገናኛ: " : "Contact: "}info@kenremind.app
                 </p>
               </div>
 

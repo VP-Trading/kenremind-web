@@ -47,8 +47,8 @@ const sections: Array<{ title: Localized; body: Localized }> = [
   {
     title: { en: "5. Contact", am: "5. መገናኛ" },
     body: {
-      en: "Questions? Contact kenremind@vptrading.et.",
-      am: "ጥያቄ አለ? በ kenremind@vptrading.et ያግኙን።",
+      en: "Questions? Contact info@kenremind.app.",
+      am: "ጥያቄ አለ? በ info@kenremind.app ያግኙን።",
     },
   },
 ];
