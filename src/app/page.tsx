@@ -20,6 +20,7 @@ import {
   X,
 } from "lucide-react";
 
+import { BrandLogo } from "~/components/brand-logo";
 import { LanguageToggle } from "~/components/language-toggle";
 import { useLanguage, type Language } from "~/components/language-provider";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "~/components/ui/accordion";
@@ -223,9 +224,6 @@ const heroScreens = {
   settings: "/brand/mocks/settings-ios.png",
 };
 
-const logoMask =
-  "bg-primary [mask-image:url('/brand/appointment-01.webp')] [mask-size:contain] [mask-repeat:no-repeat] [mask-position:center] [-webkit-mask-image:url('/brand/appointment-01.webp')] [-webkit-mask-size:contain] [-webkit-mask-repeat:no-repeat] [-webkit-mask-position:center]";
-
 const tx = (value: Localized, language: Language) => value[language];
 
 type MotionState = "pre" | "in" | "out";
@@ -353,9 +351,8 @@ export default function Home() {
 
       <header className="fixed inset-x-0 top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-xl">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
-          <Link href="/" className="flex items-center gap-3">
-            <span aria-hidden className={`block h-9 w-9 ${logoMask}`} />
-            <span className="text-lg font-semibold tracking-tight">KenRemind</span>
+          <Link href="/" className="inline-flex items-center">
+            <BrandLogo priority />
           </Link>
 
           <nav className="hidden items-center gap-7 text-sm font-semibold text-muted-foreground md:flex">
@@ -824,9 +821,8 @@ export default function Home() {
 
       <footer className="relative z-10 border-t border-border/60 py-10">
         <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-3 px-6 text-center">
-          <div className="flex items-center gap-3">
-            <span aria-hidden className={`block h-7 w-7 ${logoMask}`} />
-            <span className="text-sm font-semibold">KenRemind</span>
+          <div className="inline-flex items-center">
+            <BrandLogo variant="footer" />
           </div>
           <p className="max-w-xl text-xs text-muted-foreground">
             {language === "am"

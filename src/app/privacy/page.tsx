@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 
+import { BrandLogo } from "~/components/brand-logo";
 import { LanguageToggle } from "~/components/language-toggle";
 import { useLanguage } from "~/components/language-provider";
 import { Badge } from "~/components/ui/badge";
@@ -11,9 +12,6 @@ type Localized = {
   en: string;
   am: string;
 };
-
-const logoMask =
-  "bg-primary [mask-image:url('/brand/appointment-01.webp')] [mask-size:contain] [mask-repeat:no-repeat] [mask-position:center] [-webkit-mask-image:url('/brand/appointment-01.webp')] [-webkit-mask-size:contain] [-webkit-mask-repeat:no-repeat] [-webkit-mask-position:center]";
 
 const sections: Array<{ title: Localized; body: Localized }> = [
   {
@@ -65,9 +63,8 @@ export default function PrivacyPage() {
 
       <header className="fixed inset-x-0 top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
-          <Link href="/" className="flex items-center gap-3">
-            <span aria-hidden className={`block h-9 w-9 ${logoMask}`} />
-            <span className="text-lg font-semibold tracking-tight">KenRemind</span>
+          <Link href="/" className="inline-flex items-center">
+            <BrandLogo priority />
           </Link>
           <div className="flex items-center gap-3">
             <nav className="hidden items-center gap-6 text-sm font-semibold text-muted-foreground md:flex">
@@ -117,9 +114,8 @@ export default function PrivacyPage() {
 
       <footer className="relative z-10 border-t border-border/60 py-10">
         <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-6 px-6 text-center md:flex-row md:text-left">
-          <div className="flex items-center gap-3">
-            <span aria-hidden className={`block h-7 w-7 ${logoMask}`} />
-            <span className="text-sm font-semibold">KenRemind</span>
+          <div className="inline-flex items-center">
+            <BrandLogo variant="footer" />
           </div>
           <div className="space-y-2 text-xs text-muted-foreground">
             <p>
