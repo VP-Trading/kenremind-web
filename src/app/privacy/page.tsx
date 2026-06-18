@@ -3,53 +3,13 @@
 import Link from "next/link";
 
 import { BrandLogo } from "~/components/brand-logo";
+import { privacyPageContent, type LegalCopy } from "~/content/legal";
 import { LanguageToggle } from "~/components/language-toggle";
 import { useLanguage } from "~/components/language-provider";
 import { Badge } from "~/components/ui/badge";
 import { Card, CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
 
-type Localized = {
-  en: string;
-  am: string;
-};
-
-const sections: Array<{ title: Localized; body: Localized }> = [
-  {
-    title: { en: "1. What We Store", am: "1. የምናከማቸው" },
-    body: {
-      en: "KenRemind keeps your reminders on your device. We do not upload reminder content to our servers.",
-      am: "KenRemind ማሳሰቢያዎችዎን በመሣሪያዎ ላይ ያቆያል። የማሳሰቢያ ይዘትን ወደ ሰርቨሮቻችን አንላክም።",
-    },
-  },
-  {
-    title: { en: "2. Data Security", am: "2. የውሂብ ደህንነት" },
-    body: {
-      en: "On mobile, reminder data is encrypted on-device. The encryption key is stored in the device keychain/keystore.",
-      am: "በሞባይል ላይ የማሳሰቢያ ውሂብ በመሣሪያው ላይ ይመሰጠራል። የምስጠራ ቁልፉ በመሣሪያው keychain/keystore ውስጥ ይቀመጣል።",
-    },
-  },
-  {
-    title: { en: "3. Notifications", am: "3. ማሳወቂያዎች" },
-    body: {
-      en: "Notification delivery is handled by your operating system. We do not receive notification content.",
-      am: "የማሳወቂያ መላክ በስርዓተ ክወናዎ ይተዳደራል። የማሳወቂያ ይዘት አንቀበልም።",
-    },
-  },
-  {
-    title: { en: "4. Analytics", am: "4. ትንታኔ" },
-    body: {
-      en: "We do not collect analytics by default. If that changes, you will be informed and can opt out.",
-      am: "በነባሪ ትንታኔ አንሰበስብም። ይህ ከተቀየረ እናሳውቅዎታለን እና መሰረዝ ይችላሉ።",
-    },
-  },
-  {
-    title: { en: "5. Contact", am: "5. መገናኛ" },
-    body: {
-      en: "For privacy concerns, contact info@kenremind.app.",
-      am: "ለግላዊነት ጉዳዮች በ info@kenremind.app ያግኙን።",
-    },
-  },
-];
+const tx = (value: LegalCopy, language: "en" | "am") => value[language];
 
 export default function PrivacyPage() {
   const { language } = useLanguage();
@@ -86,24 +46,25 @@ export default function PrivacyPage() {
       <section className="relative z-10 pb-20 pt-12">
         <div className="mx-auto w-full max-w-4xl px-6">
           <Badge variant="muted" className="w-fit">
-            {language === "am" ? "የግላዊነት ፖሊሲ" : "Privacy Policy"}
+            {tx(privacyPageContent.badge, language)}
           </Badge>
           <h1 className="mt-4 text-3xl font-semibold sm:text-4xl">
-            {language === "am" ? "የግላዊነት ፖሊሲ" : "Privacy Policy"}
+            {tx(privacyPageContent.title, language)}
           </h1>
           <p className="mt-3 text-base text-muted-foreground">
-            {language === "am" ? "ውሂብዎን እንዴት እንደምንያዝ።" : "How we handle your data."}
+            {tx(privacyPageContent.subtitle, language)}
+          </p>
+          <p className="mt-2 text-sm font-medium text-muted-foreground">
+            {tx(privacyPageContent.updatedLabel, language)}
           </p>
 
           <div className="mt-8 space-y-4">
-            {sections.map((section) => (
+            {privacyPageContent.sections.map((section) => (
               <Card key={section.title.en} className="border-border/70 bg-white/70">
                 <CardHeader className="space-y-2">
-                  <CardTitle className="text-lg">
-                    {language === "am" ? section.title.am : section.title.en}
-                  </CardTitle>
+                  <CardTitle className="text-lg">{tx(section.title, language)}</CardTitle>
                   <CardDescription className="text-sm text-muted-foreground">
-                    {language === "am" ? section.body.am : section.body.en}
+                    {tx(section.body, language)}
                   </CardDescription>
                 </CardHeader>
               </Card>
