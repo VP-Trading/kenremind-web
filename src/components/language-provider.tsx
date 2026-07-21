@@ -11,15 +11,21 @@ type LanguageContextValue = {
 
 const STORAGE_KEY = "kenremind-language";
 
-const LanguageContext = createContext<LanguageContextValue | undefined>(undefined);
+const LanguageContext = createContext<LanguageContextValue | undefined>(
+  undefined,
+);
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<Language>("en");
 
   useEffect(() => {
-    const savedLanguage = window.localStorage.getItem(STORAGE_KEY);
-    if (savedLanguage === "en" || savedLanguage === "am") {
-      setLanguageState(savedLanguage);
+    try {
+      const savedLanguage = window.localStorage.getItem(STORAGE_KEY);
+      if (savedLanguage === "en" || savedLanguage === "am") {
+        setLanguageState(savedLanguage);
+      }
+    } catch {
+      // English remains the default if persisted preferences are unavailable.
     }
   }, []);
 
@@ -29,7 +35,11 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const setLanguage = (nextLanguage: Language) => {
     setLanguageState(nextLanguage);
-    window.localStorage.setItem(STORAGE_KEY, nextLanguage);
+    try {
+      window.localStorage.setItem(STORAGE_KEY, nextLanguage);
+    } catch {
+      // The current session still updates even when persistence is blocked.
+    }
   };
 
   const value = useMemo(
@@ -40,7 +50,11 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     [language],
   );
 
-  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
+  return (
+    <LanguageContext.Provider value={value}>
+      {children}
+    </LanguageContext.Provider>
+  );
 }
 
 export function useLanguage() {

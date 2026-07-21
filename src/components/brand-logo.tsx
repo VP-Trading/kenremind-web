@@ -4,6 +4,7 @@ import { cn } from "~/lib/utils";
 
 type BrandLogoProps = {
   variant?: "header" | "footer";
+  tone?: "default" | "inverse";
   className?: string;
   priority?: boolean;
 };
@@ -15,15 +16,20 @@ const variantClasses: Record<NonNullable<BrandLogoProps["variant"]>, string> = {
 
 export function BrandLogo({
   variant = "header",
+  tone = "default",
   className,
   priority = false,
 }: BrandLogoProps) {
   return (
     <Image
-      src="/brand/logo-wordmark.png"
+      src={
+        tone === "inverse"
+          ? "/brand/logo-footer.webp"
+          : "/brand/logo-wordmark.png"
+      }
       alt="KenRemind"
-      width={12154}
-      height={2218}
+      width={2400}
+      height={438}
       priority={priority}
       className={cn("block object-contain", variantClasses[variant], className)}
     />

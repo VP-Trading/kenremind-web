@@ -13,10 +13,7 @@ export function LanguageToggle({ className }: { className?: string }) {
 
   return (
     <div
-      className={cn(
-        "inline-flex items-center rounded-full border border-border/80 bg-white/75 p-1",
-        className,
-      )}
+      className={cn("language-toggle", className)}
       aria-label="Language switcher"
       role="group"
     >
@@ -26,10 +23,10 @@ export function LanguageToggle({ className }: { className?: string }) {
           type="button"
           onClick={() => setLanguage(option.value)}
           className={cn(
-            "rounded-full px-3 py-1 text-xs font-semibold transition",
+            "language-toggle__option",
             language === option.value
-              ? "bg-primary text-primary-foreground shadow-sm"
-              : "text-muted-foreground hover:text-foreground",
+              ? "language-toggle__option--active"
+              : "language-toggle__option--inactive",
           )}
           aria-pressed={language === option.value}
         >
@@ -39,4 +36,3 @@ export function LanguageToggle({ className }: { className?: string }) {
     </div>
   );
 }
-
