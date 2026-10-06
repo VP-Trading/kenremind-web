@@ -14,11 +14,13 @@ const tx = (value: LegalCopy, language: "en" | "am") => value[language];
 type LegalPageShellProps = {
   content: LegalPageContent;
   documentLabel: string;
+  embedded?: boolean;
 };
 
 export function LegalPageShell({
   content,
   documentLabel,
+  embedded = false,
 }: LegalPageShellProps) {
   const { language } = useLanguage();
   const { reducedMotion, refreshScroll } = useMotion();
@@ -59,8 +61,12 @@ export function LegalPageShell({
   }, [language, reducedMotion, refreshScroll]);
 
   return (
-    <div ref={rootRef} className="legal-page">
-      <SiteHeader />
+    <div
+      ref={rootRef}
+      className="legal-page"
+      data-embedded={embedded ? "true" : "false"}
+    >
+      {!embedded && <SiteHeader />}
       <main id="main-content">
         <header className="legal-hero">
           <div className="legal-hero__meta">
@@ -86,7 +92,7 @@ export function LegalPageShell({
           ))}
         </article>
       </main>
-      <SiteFooter />
+      {!embedded && <SiteFooter />}
     </div>
   );
 }

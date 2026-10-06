@@ -30,22 +30,22 @@ export const privacyPageContent: LegalPageContent = {
     am: "መረጃዎን እንዴት እንደምንይዝ",
   },
   updatedLabel: {
-    en: "Updated June 2026",
-    am: "የተዘመነው ጁን 2026",
+    en: "Updated August 2026",
+    am: "የተዘመነው ኦገስት 2026",
   },
   sections: [
     {
       title: { en: "1. What We Store", am: "1. የምናስቀምጠው መረጃ" },
       body: {
-        en: "KenRemind keeps your reminders on your device. We do not upload reminder content to our servers.",
-        am: "KenRemind አስታዋሾችዎን በመሣሪያዎ ላይ ብቻ ያስቀምጣል። አስታዋሾችን ወደ ሰርቨራችን አንሰቅልም።",
+        en: "KenRemind keeps your reminders and profile details, including your phone number and email address, on your device. They may be included in encrypted backups you create. We do not upload this content to our servers.",
+        am: "KenRemind አስታዋሾችዎን እና የስልክ ቁጥርና የኢሜይል አድራሻን ጨምሮ የፕሮፋይል መረጃዎን በመሣሪያዎ ላይ ያስቀምጣል። ይህ መረጃ እርስዎ በሚፈጥሩት የተመሰጠረ ምትኬ ውስጥ ሊካተት ይችላል። ይህን መረጃ ወደ ሰርቨራችን አንሰቅልም።",
       },
     },
     {
       title: { en: "2. Data Security", am: "2. የመረጃ ደህንነት" },
       body: {
-        en: "On mobile, reminder data is encrypted on-device. The encryption key is stored in the device keychain/keystore.",
-        am: "በሞባይል ላይ የአስታዋሽ ውሂብ በመሣሪያዎ ላይ ተመስጥሮ (Encrypted) ይጠበቃል። የምስጠራ ቁልፉ በመሣሪያዎ Keychain/Keystore ውስጥ ይከማቻል።",
+        en: "On mobile, reminder and profile data is encrypted on-device. The encryption key is stored in the device keychain/keystore.",
+        am: "በሞባይል ላይ የአስታዋሽ እና የፕሮፋይል ውሂብ በመሣሪያዎ ላይ ተመስጥሮ (Encrypted) ይጠበቃል። የምስጠራ ቁልፉ በመሣሪያዎ Keychain/Keystore ውስጥ ይከማቻል።",
       },
     },
     {
@@ -58,8 +58,8 @@ export const privacyPageContent: LegalPageContent = {
     {
       title: { en: "4. Analytics", am: "4. ትንታኔ (Analytics)" },
       body: {
-        en: "KenRemind uses Firebase Analytics to understand app usage, improve reminder reliability, and make features like widgets and notifications better. We do not collect reminder titles, notes, names, birthdates, exact dates, or calendar event text. You can turn analytics off anytime in Settings.",
-        am: "KenRemind የመተግበሪያ አጠቃቀምን ለመረዳት፣ የአስታዋሽ ታማኝነትን ለማሻሻል እና እንደ ዊጀቶች እና ማሳወቂያዎች ያሉ ባህሪያትን የተሻሉ ለማድረግ Firebase Analytics ይጠቀማል። የአስታዋሽ ርዕሶችን፣ ማስታወሻዎችን፣ ስሞችን፣ የልደት ቀንን፣ ትክክለኛ ቀኖችን ወይም የካሌንደር ክስተት ጽሑፍን አንሰበስብም። ትንታኔን በSettings ውስጥ በማንኛውም ጊዜ ማጥፋት ይችላሉ።",
+        en: "KenRemind uses Firebase Analytics to understand app usage, improve reminder reliability, and make features like widgets and notifications better. We do not collect reminder titles, notes, names, birthdates, phone numbers, email addresses, exact dates, or calendar event text through analytics. You can turn analytics off anytime in Settings.",
+        am: "KenRemind የመተግበሪያ አጠቃቀምን ለመረዳት፣ የአስታዋሽ ታማኝነትን ለማሻሻል እና እንደ ዊጀቶች እና ማሳወቂያዎች ያሉ ባህሪያትን የተሻሉ ለማድረግ Firebase Analytics ይጠቀማል። በትንታኔ አማካኝነት የአስታዋሽ ርዕሶችን፣ ማስታወሻዎችን፣ ስሞችን፣ የልደት ቀንን፣ የስልክ ቁጥሮችን፣ የኢሜይል አድራሻዎችን፣ ትክክለኛ ቀኖችን ወይም የካሌንደር ክስተት ጽሑፍን አንሰበስብም። ትንታኔን በSettings ውስጥ በማንኛውም ጊዜ ማጥፋት ይችላሉ።",
       },
     },
     {
